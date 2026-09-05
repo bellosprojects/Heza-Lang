@@ -7,6 +7,9 @@ on:
     tags:
       - 'v*' # El CD se activará solo cuando crees un tag como v1.0.0
 
+permissions:
+  contents: write
+
 jobs:
   # ==========================================
   # FASE 1: INTEGRACIÓN CONTINUA (CI)
@@ -77,7 +80,7 @@ jobs:
           .\setup\Output\HezaSetup-Windows.exe /VERYSILENT /SUPPRESSMSGBOXES /NORESTART
 
       - name: Publicar Release en GitHub
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           files: setup/Output/HezaSetup-Windows.exe
         env:
