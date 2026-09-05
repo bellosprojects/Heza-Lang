@@ -1,7 +1,5 @@
 /__pycache__
 /.env
 /dist
-*.spec
 *.pyc
-*.hz
 */__pycache__

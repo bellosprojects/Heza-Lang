@@ -50,15 +50,15 @@ jobs:
       - name: Configurar Python y Dependencias
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: '3.14'
 
       - name: Compilar C++ y preparar entorno
         run: |
-          pip install pybind11 pyinstaller
+          pip install pybind11 pyinstaller sympy keyboard
           # Comando de compilación C++ aquí
 
       - name: Empaquetar con PyInstaller
-        run: pyinstaller tu_archivo.spec
+        run: pyinstaller heza.spec
 
       - name: Mover ejecutable a carpeta setup
         run: Move-Item -Path "dist\heza.exe" -Destination "setup\heza.exe" -Force
