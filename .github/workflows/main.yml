@@ -75,10 +75,6 @@ jobs:
         run: |
           # Instalamos el exe generado silenciosamente para probarlo en el sistema
           .\setup\Output\HezaSetup-Windows.exe /VERYSILENT /SUPPRESSMSGBOXES /NORESTART
-          
-          Start-Sleep -Seconds 5
-
-          & "$env:LOCALAPPDATA\Programs\Bello's Projects Heza\Heza.exe"
 
       - name: Publicar Release en GitHub
         uses: softprops/action-gh-release@v1
