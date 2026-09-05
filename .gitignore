@@ -8,6 +8,7 @@
 *.pyd
 /HSCE/build/
 build_engine.py
+lines_counter.py
 *.so
 *.dll
 /HSCE/stubs/
