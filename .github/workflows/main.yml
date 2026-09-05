@@ -1,0 +1,85 @@
+name: Heza CI/CD
+
+on:
+  push:
+    branches: [ "main" ]
+  tags:
+    - 'v*' # El CD se activará solo cuando crees un tag como v1.0.0
+
+jobs:
+  # ==========================================
+  # FASE 1: INTEGRACIÓN CONTINUA (CI)
+  # ==========================================
+  test:
+    name: Build & Test
+    runs-on: windows-latest
+    
+    steps:
+      - name: Checkout del código
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11' # Ajusta a la versión que utilices
+
+      - name: Instalar dependencias
+        run: |
+          python -m pip install --upgrade pip
+          pip install pybind11 pyinstaller
+          # Aquí va tu comando para compilar el módulo C++ 
+          # Ej: pip install . o python setup.py build_ext --inplace
+
+      - name: Prueba de código puro
+        run: python heza.py test.hz
+
+  # ==========================================
+  # FASE 2: DESPLIEGUE CONTINUO (CD)
+  # ==========================================
+  release:
+    name: Build, Package & Release
+    needs: test # Solo se ejecuta si las pruebas pasan
+    if: startsWith(github.ref, 'refs/tags/') # Solo se ejecuta al crear un Tag (v*)
+    runs-on: windows-latest
+    
+    steps:
+      - name: Checkout del código
+        uses: actions/checkout@v4
+
+      - name: Configurar Python y Dependencias
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Compilar C++ y preparar entorno
+        run: |
+          pip install pybind11 pyinstaller
+          # Comando de compilación C++ aquí
+
+      - name: Empaquetar con PyInstaller
+        run: pyinstaller tu_archivo.spec
+
+      - name: Mover ejecutable a carpeta setup
+        run: Move-Item -Path "dist\heza.exe" -Destination "setup\heza.exe" -Force
+
+      - name: Prueba del ejecutable aislado
+        run: .\setup\heza.exe test.hz
+
+      - name: Instalar y compilar Inno Setup
+        run: |
+          choco install innosetup
+          iscc setup\main.iss
+
+      - name: Prueba de la instalación (Instalación Silenciosa)
+        run: |
+          # Instalamos el exe generado silenciosamente para probarlo en el sistema
+          .\setup\Output\HezaSetup-Windows.exe /VERYSILENT
+          # Refrescamos las variables de entorno si es necesario o llamamos la ruta directa
+          heza test.hz
+
+      - name: Publicar Release en GitHub
+        uses: softprops/action-gh-release@v1
+        with:
+          files: setup/Output/HezaSetup-Windows.exe
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
