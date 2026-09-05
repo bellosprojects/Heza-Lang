@@ -30,12 +30,12 @@ jobs:
       - name: Instalar dependencias
         run: |
           python -m pip install --upgrade pip
-          pip install pybind11 pyinstaller sympy keyboard
+          pip install pybind11 pyinstaller sympy keyboard setuptools pybind11_stubgen
           # Aquí va tu comando para compilar el módulo C++ 
           # Ej: pip install . o python setup.py build_ext --inplace
 
       - name: Prueba de código puro
-        run: python heza.py test.hz
+        run: python heza.py .\tests\test.hz
 
   # ==========================================
   # FASE 2: DESPLIEGUE CONTINUO (CD)
@@ -57,7 +57,7 @@ jobs:
 
       - name: Compilar C++ y preparar entorno
         run: |
-          pip install pybind11 pyinstaller sympy keyboard
+          pip install pybind11 pyinstaller sympy keyboard setuptools pybind11_stubgen
           # Comando de compilación C++ aquí
 
       - name: Empaquetar con PyInstaller
@@ -67,7 +67,7 @@ jobs:
         run: Move-Item -Path "dist\heza.exe" -Destination "setup\heza.exe" -Force
 
       - name: Prueba del ejecutable aislado
-        run: .\setup\heza.exe test.hz
+        run: .\setup\heza.exe .\tests\test.hz
 
       - name: Instalar y compilar Inno Setup
         run: |

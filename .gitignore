@@ -3,3 +3,7 @@
 /dist
 *.pyc
 */__pycache__
+/.vscode
+*.pyi
+*.pyd
+/HSCE/build
