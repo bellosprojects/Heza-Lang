@@ -2,9 +2,10 @@ name: Heza CI/CD
 
 on:
   push:
-    branches: [ "main" ]
-  tags:
-    - 'v*' # El CD se activará solo cuando crees un tag como v1.0.0
+    branches:
+      - main
+    tags:
+      - 'v*' # El CD se activará solo cuando crees un tag como v1.0.0
 
 jobs:
   # ==========================================
@@ -21,7 +22,7 @@ jobs:
       - name: Configurar Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11' # Ajusta a la versión que utilices
+          python-version: '3.14' # Ajusta a la versión que utilices
 
       - name: Instalar dependencias
         run: |
