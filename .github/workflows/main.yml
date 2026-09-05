@@ -74,9 +74,11 @@ jobs:
       - name: Prueba de la instalación (Instalación Silenciosa)
         run: |
           # Instalamos el exe generado silenciosamente para probarlo en el sistema
-          .\setup\Output\HezaSetup-Windows.exe /VERYSILENT
-          # Refrescamos las variables de entorno si es necesario o llamamos la ruta directa
-          heza test.hz
+          .\setup\Output\HezaSetup-Windows.exe /VERYSILENT /SUPPRESSMSGBOXES /NORESTART
+          
+          Start-Sleep -Seconds 5
+
+          & "$env:LOCALAPPDATA\Programs\Bello's Projects Heza\Heza.exe"
 
       - name: Publicar Release en GitHub
         uses: softprops/action-gh-release@v1
