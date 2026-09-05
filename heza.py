@@ -3,10 +3,13 @@ from lexer import Lexer, LexerError
 from interpreter import Interpreter, InterpreterError
 import json, sys
 from console import modo_calculadora_de_expresiones
-
+from HSCE import HSCE as cas
 #Codigo fuente
 
 def main():
+
+    print(f"HEZA LANG v1.1.{cas.Sin(cas.pi).simplify().print()}")
+
     if len(sys.argv) > 1:
 
         path = sys.argv[1]

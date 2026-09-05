@@ -6,4 +6,8 @@
 /.vscode
 *.pyi
 *.pyd
-/HSCE/build
+/HSCE/build/
+build_engine.py
+*.so
+*.dll
+/HSCE/stubs/
