@@ -35,5 +35,5 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon=['../../new_heza_logo.ico'],
+    icon=['./setup/HezaLogo.ico'],
 )
