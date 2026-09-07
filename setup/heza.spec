@@ -2,7 +2,7 @@
 
 
 a = Analysis(
-    ['heza.py'],
+    ['../src/heza.py'],
     pathex=[],
     binaries=[],
     datas=[],
@@ -35,5 +35,5 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon=['./setup/HezaLogo.ico'],
+    icon=['HezaLogo.ico'],
 )

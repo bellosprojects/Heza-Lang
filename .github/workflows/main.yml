@@ -39,7 +39,7 @@ jobs:
           pytest
 
       - name: Prueba de código puro
-        run: python heza.py .\tests\test.hz
+        run: python .\src\heza.py .\tests\test.hz
 
   # ==========================================
   # FASE 2: DESPLIEGUE CONTINUO (CD)
@@ -69,10 +69,10 @@ jobs:
           pytest
 
       - name: Empaquetar con PyInstaller
-        run: pyinstaller heza.spec
+        run: pyinstaller .\setup\heza.spec
 
       - name: Mover ejecutable a carpeta setup
-        run: Move-Item -Path "dist\heza.exe" -Destination "setup\heza.exe" -Force
+        run: Move-Item -Path "setup\dist\heza.exe" -Destination "setup\heza.exe" -Force
 
       - name: Prueba del ejecutable aislado
         run: .\setup\heza.exe .\tests\test.hz

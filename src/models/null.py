@@ -295,7 +295,7 @@ class Null:
 
         if isinstance(value, Infinite):
 
-            from indeterminate import Indeterminate
+            from models.indeterminate import Indeterminate
 
             return Indeterminate()
         return self
@@ -329,7 +329,7 @@ class Null:
         """
 
         if isinstance(value, Null):
-            from indeterminate import Indeterminate
+            from models.indeterminate import Indeterminate
 
             return Indeterminate()
         return self
@@ -350,7 +350,7 @@ class Null:
         """
 
         if isinstance(value, Null):
-            from indeterminate import Indeterminate
+            from models.indeterminate import Indeterminate
 
             return Indeterminate()
 
@@ -370,7 +370,7 @@ class Null:
         """
 
         if isinstance(value, Null):
-            from indeterminate import Indeterminate
+            from models.indeterminate import Indeterminate
 
             return Indeterminate()
         return self
@@ -414,7 +414,7 @@ class Null:
             int(1): En cualquier otro caso
         """
 
-        from infinite import Infinite
+        from models.infinite import Infinite
 
         if isinstance(value, Infinite):
             return NotImplemented

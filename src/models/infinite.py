@@ -211,11 +211,11 @@ class Infinite:
             if self.sign == value.sign:
                 return self
             
-            from indeterminate import Indeterminate
+            from models.indeterminate import Indeterminate
 
             return Indeterminate()
         
-        from null import Null
+        from models.null import Null
 
         if isinstance(value, Null):
             return self
@@ -266,7 +266,7 @@ class Infinite:
         if isinstance(value, Infinite):
             return self.__add__(Infinite(-value.sign))
         
-        from null import Null
+        from models.null import Null
 
         if isinstance(value, (Null, int, float)):
             return self
@@ -290,7 +290,7 @@ class Infinite:
         NotImplemented : en otro caso 
         """
 
-        from null import Null
+        from models.null import Null
 
         if isinstance(value, (Null, int, float)):
             return Infinite(-self.sign)
@@ -317,10 +317,10 @@ class Infinite:
         NotImplemented : Si value es de un tipo incompatible
         """
 
-        from null import Null
+        from models.null import Null
 
         if isinstance(value, Null) or value == 0:
-            from indeterminate import Indeterminate
+            from models.indeterminate import Indeterminate
 
             return Indeterminate()
         
@@ -379,11 +379,11 @@ class Infinite:
         """
 
         if isinstance(value, Infinite):
-            from indeterminate import Indeterminate
+            from models.indeterminate import Indeterminate
 
             return Indeterminate()
         
-        from null import Null
+        from models.null import Null
 
         if isinstance(value, Null) or value == 0:
             return self.__pos__()
@@ -414,12 +414,12 @@ class Infinite:
         NotImplemented : Si value es de un tipo incompatible.
         """
 
-        from indeterminate import Indeterminate    
+        from models.indeterminate import Indeterminate    
 
         if isinstance(value, Indeterminate):
             return value
         
-        from null import Null
+        from models.null import Null
         
         if isinstance(value, (Null, int, float)):
             return Null()
@@ -446,12 +446,12 @@ class Infinite:
         NotImplemented : Si value es de un tipo incompatible.
         """
 
-        from indeterminate import Indeterminate
+        from models.indeterminate import Indeterminate
 
         if isinstance(value, Indeterminate):
             return value
         
-        from null import Null
+        from models.null import Null
 
         if not isinstance(value, (Null, int, float, Infinite)):
             return NotImplemented
@@ -482,8 +482,8 @@ class Infinite:
         NotImplemented : Si value es de un tipo incompatible.
         """
 
-        from null import Null
-        from indeterminate import Indeterminate
+        from models.null import Null
+        from models.indeterminate import Indeterminate
 
         if isinstance(value, (Indeterminate, Null, int, float)):
             return value
@@ -516,11 +516,11 @@ class Infinite:
         """
 
         if isinstance(value, Infinite):
-            from indeterminate import Indeterminate
+            from models.indeterminate import Indeterminate
 
             return Indeterminate()
         
-        from null import Null
+        from models.null import Null
         
         if isinstance(value, Null) or value == 0:
             return Indeterminate()
@@ -569,8 +569,8 @@ class Infinite:
         
         """
 
-        from indeterminate import Indeterminate
-        from null import Null
+        from models.indeterminate import Indeterminate
+        from models.null import Null
 
         if isinstance(value, Indeterminate):
             return value

@@ -3,7 +3,7 @@ from lexer import Lexer, LexerError
 from interpreter import Interpreter, InterpreterError
 import sys
 from console import modo_calculadora_de_expresiones
-from HSCE import HSCE as cas
+from engine import HSCE as cas
 #Codigo fuente
 
 def main():
