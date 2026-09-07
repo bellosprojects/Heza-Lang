@@ -85,7 +85,7 @@ jobs:
         run: pyinstaller .\setup\heza.spec
 
       - name: Mover ejecutable a carpeta setup
-        run: Move-Item -Path "setup\dist\heza.exe" -Destination "setup\heza.exe" -Force
+        run: Move-Item -Path "dist\heza.exe" -Destination "setup\heza.exe" -Force
 
       - name: Prueba del ejecutable aislado
         run: .\setup\heza.exe .\tests\test.hz
