@@ -5,15 +5,13 @@ on:
     branches:
       - main
     tags:
-      - 'v*' # El CD se activará solo cuando crees un tag como v1.0.0
+      - 'v*'
 
 permissions:
   contents: write
 
 jobs:
-  # ==========================================
-  # FASE 1: INTEGRACIÓN CONTINUA (CI)
-  # ==========================================
+
   test:
     name: Build & Test
     runs-on: windows-latest
@@ -27,16 +25,24 @@ jobs:
         with:
           python-version: '3.14' # Ajusta a la versión que utilices
 
-      - name: Instalar dependencias
+      - name: Instalar dependencias de python
         run: |
           python -m pip install --upgrade pip
           pip install pybind11 pyinstaller sympy keyboard setuptools pybind11_stubgen pytest
           
+      - name: Construyendo El motor de C++
+        run: |
           cd HSCE
           python setup.py build_ext --inplace
           cd ..
 
-          pytest
+      - name: Moviendo el archivo .pyd a src\engine
+        run: |
+          mkdir "src/engine"
+          MoveItem -Path "HSCE\HSCE.cp314-win_amd64.pyd" -Destination "src\engine\HSCE.cp314-win_amd64.pyd" -Force
+
+      - name: Ejecutando pruebas unitarias
+        run: pytest
 
       - name: Prueba de código puro
         run: python .\src\heza.py .\tests\test.hz
