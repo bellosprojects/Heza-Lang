@@ -23,7 +23,7 @@ jobs:
       - name: Configurar Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.14' # Ajusta a la versión que utilices
+          python-version: '3.14'
 
       - name: Instalar dependencias de python
         run: |
@@ -42,18 +42,15 @@ jobs:
           Move-Item -Path "HSCE\HSCE.cp314-win_amd64.pyd" -Destination "src\engine\HSCE.cp314-win_amd64.pyd" -Force
 
       - name: Ejecutando pruebas unitarias
-        run: pytest
+        run: python -m pytest
 
       - name: Prueba de código puro
         run: python .\src\heza.py .\tests\test.hz
 
-  # ==========================================
-  # FASE 2: DESPLIEGUE CONTINUO (CD)
-  # ==========================================
   release:
     name: Build, Package & Release
-    needs: test # Solo se ejecuta si las pruebas pasan
-    if: startsWith(github.ref, 'refs/tags/') # Solo se ejecuta al crear un Tag (v*)
+    needs: test
+    if: startsWith(github.ref, 'refs/tags/')
     runs-on: windows-latest
     
     steps:
@@ -65,14 +62,24 @@ jobs:
         with:
           python-version: '3.14'
 
-      - name: Compilar C++ y preparar entorno
+      - name: Instalar dependencias de python
         run: |
+          python -m pip install --upgrade pip
           pip install pybind11 pyinstaller sympy keyboard setuptools pybind11_stubgen pytest
+          
+      - name: Construyendo El motor de C++
+        run: |
           cd HSCE
           python setup.py build_ext --inplace
           cd ..
 
-          pytest
+      - name: Moviendo el archivo .pyd a src\engine
+        run: |
+          mkdir "src/engine"
+          Move-Item -Path "HSCE\HSCE.cp314-win_amd64.pyd" -Destination "src\engine\HSCE.cp314-win_amd64.pyd" -Force
+
+      - name: Ejecutando pruebas unitarias
+        run: python -m pytest
 
       - name: Empaquetar con PyInstaller
         run: pyinstaller .\setup\heza.spec
@@ -90,7 +97,6 @@ jobs:
 
       - name: Prueba de la instalación (Instalación Silenciosa)
         run: |
-          # Instalamos el exe generado silenciosamente para probarlo en el sistema
           .\setup\Output\HezaSetup-Windows.exe /VERYSILENT /SUPPRESSMSGBOXES /NORESTART
 
       - name: Publicar Release en GitHub
