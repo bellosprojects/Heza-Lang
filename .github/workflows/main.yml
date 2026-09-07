@@ -39,7 +39,7 @@ jobs:
       - name: Moviendo el archivo .pyd a src\engine
         run: |
           mkdir "src/engine"
-          MoveItem -Path "HSCE\HSCE.cp314-win_amd64.pyd" -Destination "src\engine\HSCE.cp314-win_amd64.pyd" -Force
+          Move-Item -Path "HSCE\HSCE.cp314-win_amd64.pyd" -Destination "src\engine\HSCE.cp314-win_amd64.pyd" -Force
 
       - name: Ejecutando pruebas unitarias
         run: pytest
