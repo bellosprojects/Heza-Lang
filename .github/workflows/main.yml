@@ -30,11 +30,13 @@ jobs:
       - name: Instalar dependencias
         run: |
           python -m pip install --upgrade pip
-          pip install pybind11 pyinstaller sympy keyboard setuptools pybind11_stubgen
+          pip install pybind11 pyinstaller sympy keyboard setuptools pybind11_stubgen pytest
           
           cd HSCE
           python setup.py build_ext --inplace
           cd ..
+
+          pytest
 
       - name: Prueba de código puro
         run: python heza.py .\tests\test.hz
@@ -59,10 +61,12 @@ jobs:
 
       - name: Compilar C++ y preparar entorno
         run: |
-          pip install pybind11 pyinstaller sympy keyboard setuptools pybind11_stubgen
+          pip install pybind11 pyinstaller sympy keyboard setuptools pybind11_stubgen pytest
           cd HSCE
           python setup.py build_ext --inplace
           cd ..
+
+          pytest
 
       - name: Empaquetar con PyInstaller
         run: pyinstaller heza.spec

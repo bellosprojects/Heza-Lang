@@ -4,9 +4,10 @@ from pybind11.setup_helpers import Pybind11Extension, build_ext
 
 BASE_DIR = Path(__file__).parent.resolve()
 
-archivos_fuente = [str(p) for p in (BASE_DIR / "src").glob("*.cpp")]
+archivos_fuente = [str(p) for p in (BASE_DIR / "src").glob("**/*.cpp")]
 
-# Define la extensión. El primer argumento es el nombre del módulo en Python.
+archivos_fuente += [str(p) for p in (BASE_DIR / "python").glob("*.cpp")]
+
 ext_modules = [
     Pybind11Extension(
         "HSCE",

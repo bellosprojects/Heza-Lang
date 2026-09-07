@@ -12,3 +12,4 @@ lines_counter.py
 *.so
 *.dll
 /HSCE/stubs/
+/.pytest_cache/
