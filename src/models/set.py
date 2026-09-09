@@ -2,20 +2,6 @@ class HezaSet:
 
     def __init__(self, values: set):
         self.values = set(values)
-
-    def get(self, index):
-
-        from models import Number
-
-        if not isinstance(index, Number):
-            raise ValueError("EL indice debe ser un objeto de tipo Number")
-
-        idx = int(index.value)
-
-        if idx < 0 or idx > len(self.values):
-            raise IndexError("Indice fuea de rango")
-        
-        return list(self.values)[idx]
     
     def add(self, new_value):
         if new_value is self:
@@ -43,7 +29,17 @@ class HezaSet:
         if not isinstance(other, HezaSet):
             raise TypeError(f"No se puede hacer producto cartesiano con {type(other)}")
         from .tuple import HezaTuple
-        return HezaSet({HezaTuple([a, b]) for a in self.values for b in other.values})
+
+        result = []
+        for a in self.values:
+            for b in other.values:
+                if isinstance(a, HezaTuple):
+                    nuevos_elementos = a.values + [b]
+                    result.append(HezaTuple(nuevos_elementos))
+                else:
+                    result.append(HezaTuple([a, b]))
+
+        return HezaSet(set(result))
         
     def __sub__(self, other):
         if not isinstance(other, HezaSet):

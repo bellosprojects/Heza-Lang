@@ -8,7 +8,7 @@ from engine import HSCE as cas
 
 def main():
 
-    print(f"HEZA LANG v1.1.{cas.Sin(cas.pi).simplify().print()}")
+    print(f"HEZA LANG v1.1.{cas.Number(0).to_str()}")
 
     if len(sys.argv) > 1:
 

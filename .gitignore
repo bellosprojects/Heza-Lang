@@ -9,6 +9,7 @@
 /HSCE/build/
 build_engine.py
 lines_counter.py
+src/hidden.py
 *.so
 *.dll
 /HSCE/stubs/

@@ -1,7 +1,6 @@
 #pragma once
-#define EXPR_H
-#ifdef EXPR_H
 
 #include <heza/core/expr.hpp>
-
-#endif EXPR_H
+#include <heza/core/arithmetic.hpp>
+#include <heza/core/visitor.hpp>
+#include <heza/core/tuple.hpp>
