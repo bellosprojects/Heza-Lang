@@ -56,7 +56,7 @@ PYBIND11_MODULE(HSCE, m) {
             "Verifica si el conjunto esta vacio")
         .def("is_infinite", &heza::sets::SetExpr::is_infinite, 
             "Verifica si el conjunto tiene cardinalidad infinita")
-        .def("is_disjoint", &heza::sets::SetExpr::is_disjoint, py::arg("other"),
+        .def("is_disjoint", &heza::sets::SetExpr::is_disjoint, py::arg("other"), 
             "Verifica si self y other son disjuntos")
         .def("cardinality", &heza::sets::SetExpr::cardinality, 
             "Devuelve la cardinalidad del conjunto")

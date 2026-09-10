@@ -24,7 +24,6 @@ namespace heza::core {
             virtual ExprPtr simplify() const = 0;
             virtual void accept(const VisitorPtr& visitor) const = 0;
             virtual size_t hash() const = 0;
-            virtual int compare(const ExprPtr& other) const = 0;
     };
 
 };
