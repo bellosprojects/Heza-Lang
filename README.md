@@ -29,4 +29,4 @@ Para facilitar la escritura de los símbolos matemáticos UNICODE Heza tiene una
 
 [Instala la Extensión Oficial para VS Code](https://marketplace.visualstudio.com/items?itemName=BellosProjects.heza-support)
 
-Visita la [Web Oficial de Heza Lang]() para tener acceso a una guía de instalación, ejemplos de código, documentación completa y ayuda a preguntas frecuentes. 
+Visita la [Web Oficial de Heza Lang](https://bellosprojects.github.io/Heza-Lang/) para tener acceso a una guía de instalación, ejemplos de código, documentación completa y ayuda a preguntas frecuentes. 
