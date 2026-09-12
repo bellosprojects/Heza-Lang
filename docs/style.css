@@ -1,13 +1,90 @@
-* {
-    margin: 0;
-    padding: 0;
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-}
-
 body {
-    background-color: #0E121F;
+    background-color: #03060a;
+    color: #e2e8f0;
+    overflow-x: hidden;
 }
 
-h1 {
+/* Ambient Glow Effects */
+.ambient-glow {
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(0, 229, 255, 0.05) 0%, rgba(3, 6, 10, 0) 70%);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* Glassmorphism Navbar */
+.glass-nav {
+    background: rgba(3, 6, 10, 0.6);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(0, 229, 255, 0.1);
+}
+
+/* Glowing Buttons */
+.btn-glow {
+    position: relative;
+    background: transparent;
+    border: 1px solid rgba(0, 229, 255, 0.5);
     color: white;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    overflow: hidden;
+}
+.btn-glow::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(45deg, transparent, rgba(0, 229, 255, 0.1), transparent);
+    transform: translateX(-100%);
+    transition: transform 0.6s ease;
+}
+.btn-glow:hover {
+    border-color: #00E5FF;
+    box-shadow: 0 0 25px rgba(0, 229, 255, 0.3), inset 0 0 10px rgba(0, 229, 255, 0.2);
+    text-shadow: 0 0 8px rgba(0, 229, 255, 0.5);
+    transform: translateY(-2px);
+}
+.btn-glow:hover::before {
+    transform: translateX(100%);
+}
+
+/* Luxury Cards */
+.luxury-card {
+    background: linear-gradient(145deg, #0a111a, #05090f);
+    border: 1px solid rgba(0, 136, 170, 0.2);
+    border-radius: 1rem;
+    transition: all 0.5s ease;
+}
+.luxury-card:hover {
+    border-color: rgba(0, 229, 255, 0.6);
+    box-shadow: 0 10px 40px -10px rgba(0, 229, 255, 0.15);
+    transform: translateY(-5px);
+}
+
+/* Text Gradients */
+.text-gradient {
+    background: linear-gradient(to right, #ffffff, #00E5FF);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.text-gradient-accent {
+    background: linear-gradient(to right, #00E5FF, #0088AA);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Placeholder styling for visibility */
+.placeholder-box {
+    border: 1px dashed rgba(0, 229, 255, 0.3);
+    background: rgba(10, 17, 26, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #8b9bb4;
+    font-style: italic;
 }

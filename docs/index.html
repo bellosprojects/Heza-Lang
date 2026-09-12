@@ -1,13 +1,314 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heza Lang</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script src="script.js"></script>
     <link rel="stylesheet" href="style.css">
     <link rel="shortcut icon" href="assets/HezaLogo.ico" type="image/x-icon">
-    <title>Heza Lang</title>
+    
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Space Grotesk for headings (tech/modern feel), Inter for body -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@300;400;600;700&display=swap" rel="stylesheet">
+
 </head>
-<body>
-    <h1>Web Oficial de Heza Lang</h1>
+<body class="antialiased selection:bg-heza-cyan selection:text-black font-sans">
+
+    <!-- Ambient Background Elements -->
+    <div class="ambient-glow top-0 left-[-200px]"></div>
+    <div class="ambient-glow top-[40%] right-[-300px]"></div>
+    <div class="ambient-glow bottom-0 left-[20%]"></div>
+
+    <!-- 1. Navbar -->
+    <nav class="fixed w-full z-50 glass-nav transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center gap-3">
+                    <img class="h-10 w-auto" src="assets/HezaLogo.ico" alt="Heza Logo">
+                    <span class="font-heading font-bold text-xl tracking-wider text-white">Heza Lang</span>
+                </div>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <a href="#about" class="text-gray-300 hover:text-heza-cyan transition-colors px-3 py-2 rounded-md text-sm font-medium">Acerca de</a>
+                        <a href="#features" class="text-gray-300 hover:text-heza-cyan transition-colors px-3 py-2 rounded-md text-sm font-medium">Caracteristicas</a>
+                        <a href="#vscode" class="text-gray-300 hover:text-heza-cyan transition-colors px-3 py-2 rounded-md text-sm font-medium">Extension</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 2. Hero Section -->
+    <section class="relative pt-40 pb-32 lg:pt-56 lg:pb-48 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8 relative z-10 text-center">
+            
+            <div data-aos="fade-up" data-aos-duration="1000">
+                <!-- Eyebrow text -->
+                <p class="text-heza-cyan font-mono text-sm uppercase tracking-[0.2em] mb-4">
+                    La evolución del código matemático
+                </p>
+                
+                <!-- Main Title -->
+                <h1 class="text-5xl md:text-7xl lg:text-8xl font-heading font-bold tracking-tight mb-8 leading-tight">
+                    <span class="block">Conoce</span>
+                    <span class="block text-gradient">Heza Lang</span>
+                </h1>
+                
+                <!-- Subtitle -->
+                <p class="mt-4 text-xl md:text-2xl text-heza-textMuted max-w-3xl mx-auto font-light leading-relaxed">
+                    Un lenguaje de programacion con matematicas nativas interpretado con Python y acelerado en C++
+                </p>
+            </div>
+
+            <!-- CTA Buttons -->
+            <div class="mt-12 flex flex-col sm:flex-row justify-center gap-6" data-aos="fade-up" data-aos-delay="200" data-aos-duration="1000">
+                <a href="https://github.com/bellosprojects/Heza-Lang" class="btn-glow px-8 py-4 rounded-full font-semibold text-lg inline-flex items-center justify-center gap-2">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd"></path></svg>
+                    Repositorio de Github
+                </a>
+                <a href="https://github.com/bellosprojects/Heza-Lang/releases/latest/download/HezaSetup-Windows.exe" class="px-8 py-4 rounded-full font-semibold text-lg bg-white/5 hover:bg-white/10 border border-white/10 transition-colors inline-flex items-center justify-center">
+                    Descarga el Interprete
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. Philosophy / About Section -->
+    <section id="about" class="py-24 lg:py-32 relative border-t border-white/5">
+        <div class="max-w-4xl mx-auto px-6 text-center" data-aos="fade-in" data-aos-duration="1200">
+            <h2 class="text-3xl md:text-4xl font-heading font-semibold mb-8 text-gradient-accent">
+                La Visión de Heza
+            </h2>
+            <p class="text-xl md:text-3xl font-light text-gray-300 leading-relaxed">
+                "Heza fue diseñado con un propósito claro: unificar la sintaxis matemática pura con el rendimiento de bajo nivel. Al interpretar UNICODE nativo en Python y delegar la carga computacional pesada a C++ mediante pybind11, Heza ofrece un flujo de trabajo sin fricciones para la resolución de ecuaciones, cálculo diferencial y manipulación de conjuntos. Es la herramienta definitiva para quienes exigen precisión académica y tiempos de ejecución optimizados."
+            </p>
+        </div>
+    </section>
+
+    <!-- 4. Features Grid -->
+    <section id="features" class="py-24 lg:py-32 relative">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="text-center mb-20" data-aos="fade-up">
+                <h2 class="text-3xl md:text-5xl font-heading font-bold mb-6">
+                    Caracteristicas destacadas
+                </h2>
+                <p class="text-heza-textMuted text-lg max-w-2xl mx-auto">
+                    Descubre las capacidades mas interesantes de Heza
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                <!-- Card 1 -->
+                <div class="luxury-card p-8 relative overflow-hidden group" data-aos="fade-up" data-aos-delay="100">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-heza-cyan/10 rounded-full blur-3xl group-hover:bg-heza-cyan/20 transition-all"></div>
+                    <div class="w-14 h-14 rounded-lg bg-heza-bg border border-heza-teal/30 flex items-center justify-center mb-6 text-heza-cyan">
+                        <!-- Placeholder Icon -->
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"></path></svg>
+                    </div>
+                    <h3 class="text-xl font-heading font-semibold text-white mb-4">Notacion Matematica</h3>
+                    <p class="text-heza-textMuted leading-relaxed">
+                        Usa simbolos matematicos UNICODE nativos para expresarte como lo harias en un papel y ahorra horas aprendiendo sintaxis compleja.
+                    </p>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="luxury-card p-8 relative overflow-hidden group" data-aos="fade-up" data-aos-delay="200">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-heza-teal/10 rounded-full blur-3xl group-hover:bg-heza-teal/20 transition-all"></div>
+                    <div class="w-14 h-14 rounded-lg bg-heza-bg border border-heza-teal/30 flex items-center justify-center mb-6 text-heza-cyan">
+                        <!-- Placeholder Icon -->
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                    </div>
+                    <h3 class="text-xl font-heading font-semibold text-white mb-4">Alta eficiencia</h3>
+                    <p class="text-heza-textMuted leading-relaxed">
+                        Rendimiento acelerado en C++ via pybind11, realiza calculos complejos en milisegundos y mantiene la expresividad de un lenguaje declarativo.
+                    </p>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="luxury-card p-8 relative overflow-hidden group" data-aos="fade-up" data-aos-delay="300">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-heza-cyan/10 rounded-full blur-3xl group-hover:bg-heza-cyan/20 transition-all"></div>
+                    <div class="w-14 h-14 rounded-lg bg-heza-bg border border-heza-teal/30 flex items-center justify-center mb-6 text-heza-cyan">
+                        <!-- Placeholder Icon -->
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+                    </div>
+                    <h3 class="text-xl font-heading font-semibold text-white mb-4">CAS integrado</h3>
+                    <p class="text-heza-textMuted leading-relaxed">
+                        Cuenta con un sistema de algebra computacion potente capaz de realizar simplificaciones algebricas, comprension de conjuntos y operaciones simbolicas.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. VS Code / LSP Section -->
+    <section id="vscode" class="py-24 lg:py-32 relative border-t border-white/5 bg-heza-surface/30">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                
+                <!-- Text Content -->
+                <div data-aos="fade-right">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-heza-teal/10 border border-heza-teal/20 text-heza-cyan text-sm font-medium mb-6">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M23.15 2.587L18.21.21a1.494 1.494 0 0 0-1.705.29l-9.46 8.63-4.12-3.128a.999.999 0 0 0-1.276.057L.327 7.261A1 1 0 0 0 .326 8.74L8.496 15.7l-4.7 4.094a.999.999 0 0 0-.256 1.082 1 1 0 0 0 .822.613l6.452.483 8.3-7.568.002-.002.003-.003.111-.1 4.542-4.156a1.5 1.5 0 0 0 .426-1.503l-.001-.001-.048-.153z"/></svg>
+                        VS Code Extension
+                    </div>
+                    <h2 class="text-3xl md:text-5xl font-heading font-bold mb-6 leading-tight">
+                        Mejora tu experiencia de desarrollo con la Extension de VS Code Oficial
+                    </h2>
+                    <p class="text-heza-textMuted text-lg mb-8 leading-relaxed">
+                        Aumenta tu productividad con Heza Support, la extension oficial de Heza Lang para VS Code y aprovecha las capacidades de un LSP completo
+                    </p>
+                    
+                    <ul class="space-y-4 mb-10">
+                        <li class="flex items-start gap-3">
+                            <svg class="w-6 h-6 text-heza-cyan flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <span class="text-gray-300">Ayuda Contextual: Heza entiende y respeta los Scopes para ofrecer ayuda</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <svg class="w-6 h-6 text-heza-cyan flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <span class="text-gray-300">Snippets Inteligentes: Autocompletado para simbolos matematicos dificiles de escribir</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <svg class="w-6 h-6 text-heza-cyan flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <span class="text-gray-300">Hover docs: Heza Support usa tus comentarios como la documentacion de tu propio codigo</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <svg class="w-6 h-6 text-heza-cyan flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <span class="text-gray-300">Deteccion de Errores: Cero sorpresas por una palabra mal escrita o mal ubicada</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <svg class="w-6 h-6 text-heza-cyan flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <span class="text-gray-300">Linter, Go to definition, Symbols y mas con Heza Support</span>
+                        </li>
+                    </ul>
+
+                    <a href="https://marketplace.visualstudio.com/items?itemName=BellosProjects.heza-support" class="btn-glow px-6 py-3 rounded-lg font-medium inline-block text-sm">
+                        Instala Heza Support
+                    </a>
+                </div>
+
+                <!-- Image Placeholder -->
+                <div data-aos="fade-left">
+                    <div class="relative rounded-xl p-2 bg-gradient-to-tr from-heza-surface to-heza-bg border border-white/10 shadow-2xl">
+                        <!-- Faux Window Controls -->
+                        <div class="flex gap-2 px-4 py-3 border-b border-white/5">
+                            <div class="w-3 h-3 rounded-full bg-red-500/20 border border-red-500/50"></div>
+                            <div class="w-3 h-3 rounded-full bg-yellow-500/20 border border-yellow-500/50"></div>
+                            <div class="w-3 h-3 rounded-full bg-green-500/20 border border-green-500/50"></div>
+                        </div>
+                        <!-- Empty State for Image/GIF -->
+                        <div class="placeholder-box rounded-b-lg w-full aspect-video">
+                            <div class="text-center">
+                                <img src="assets/extension.png" alt="Imagen de Heza Support">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. CI/CD & Open Source Section -->
+    <section class="py-24 lg:py-32 relative overflow-hidden">
+        <!-- Technical grid background subtle -->
+        <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTAgMGg0MHY0MEgwVjB6bTIwIDIwaDIwdjIwSDIwdi0yMHptMC0yMGgyMHYyMEgyMFYwem0tMjAgMjBoMjB2MjBIMHYtMjB6IiBmaWxsPSJyZ2JhKDI1NSwgMjU1LCAyNTUsIDAuMDEpIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiLz48L3N2Zz4=')] opacity-30"></div>
+        
+        <div class="max-w-5xl mx-auto px-6 relative z-10 text-center">
+            <div data-aos="fade-up">
+                <h2 class="text-3xl md:text-5xl font-heading font-bold mb-8 text-white">
+                    Lanzamientos 100% verificados 
+                </h2>
+                
+                <div class="luxury-card p-10 md:p-14 inline-block text-left w-full">
+                    <p class="text-heza-textMuted text-lg leading-relaxed mb-6 font-mono text-sm">
+                        <span class="text-heza-teal">&gt;</span> Pipeline de pruebas y empaquetado por cada commit<br><br>
+                        <span class="text-heza-teal">&gt;</span> Suite de pruebas unitarias y de integracion para un codigo robuzto<br><br>
+                        <span class="text-heza-teal">&gt;</span> Lanzamientos actualizados y verificados via Github Actions
+                    </p>
+                    
+                    <div class="flex flex-wrap items-center justify-center md:justify-start gap-4 mt-8 pt-8 border-t border-white/10">
+                        <!-- Mock badges -->
+                        <div class="px-3 py-1 bg-white/5 border border-white/10 rounded font-mono text-xs text-gray-400 flex items-center gap-2">
+                            <div class="w-2 h-2 rounded-full bg-green-500"></div> build: passing
+                        </div>
+                        <div class="px-3 py-1 bg-white/5 border border-white/10 rounded font-mono text-xs text-gray-400 flex items-center gap-2">
+                            <div class="w-2 h-2 rounded-full bg-green-500"></div> tests: 100%
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. Footer -->
+    <footer class="border-t border-white/10 bg-[#020408] pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+                
+                <div class="col-span-1 md:col-span-2">
+                    <div class="flex items-center gap-3 mb-4">
+                        <img class="h-8 w-auto opacity-70 grayscale hover:grayscale-0 transition-all" src="assets/HezaLogo.ico" alt="Heza Logo">
+                        <span class="font-heading font-bold text-lg text-gray-400">Heza Lang</span>
+                    </div>
+                    <p class="text-gray-500 text-sm max-w-sm">
+                        El lenguaje donde la distancia entre las matematicas y la programacion tiende a cero.
+                    </p>
+                </div>
+                
+                <div>
+                    <h4 class="text-white font-semibold mb-4 text-sm uppercase tracking-wider">Recursos</h4>
+                    <ul class="space-y-2 text-sm text-gray-500">
+                        <li><a href="#" class="hover:text-heza-cyan transition-colors">[Enlace Documentación]</a></li>
+                        <li><a href="#" class="hover:text-heza-cyan transition-colors">[Enlace Instalación]</a></li>
+                        <li><a href="#" class="hover:text-heza-cyan transition-colors">[Enlace Ejemplos]</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-semibold mb-4 text-sm uppercase tracking-wider">Comunidad</h4>
+                    <ul class="space-y-2 text-sm text-gray-500">
+                        <li><a href="#" class="hover:text-heza-cyan transition-colors">[Enlace GitHub]</a></li>
+                        <li><a href="#" class="hover:text-heza-cyan transition-colors">[Enlace Discord/Foro]</a></li>
+                        <li><a href="#" class="hover:text-heza-cyan transition-colors">[Enlace Contribuir]</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-gray-600 text-sm">
+                    &copy; 2026 Bello's Projects. Todos los derechos reservados.
+                </p>
+                <div class="flex gap-4 text-sm text-gray-600">
+                    <a href="#" class="hover:text-gray-300">[Aviso Legal]</a>
+                    <a href="#" class="hover:text-gray-300">[Privacidad]</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // Initialize Animate On Scroll
+        AOS.init({
+            once: true, // whether animation should happen only once - while scrolling down
+            offset: 50, // offset (in px) from the original trigger point
+        });
+    </script>
 </body>
 </html>
