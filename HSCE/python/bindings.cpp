@@ -22,7 +22,9 @@ PYBIND11_MODULE(HSCE, m) {
         coincidencia de patrones (pattern matching) y reescritura de reglas.
     )pbdoc";
 
-    py::class_<heza::core::Expr, heza::core::ExprPtr>(m, "Expr", "Clase base abstracta para todas las expresiones.")
+    // =========================== CLASE BASE ==============================================================================================================================
+
+    py::class_<heza::core::Expr, std::shared_ptr<heza::core::Expr>>(m, "Expr", "Clase base abstracta para todas las expresiones.")
         .def("__str__", &heza::core::Expr::to_str)
         .def("__repr__", &heza::core::Expr::to_str)
         .def("to_str", &heza::core::Expr::to_str,
@@ -34,69 +36,97 @@ PYBIND11_MODULE(HSCE, m) {
         .def("clone", &heza::core::Expr::clone,
             "Obtiene una copia profunda de la expresion")
         .def("simplify", &heza::core::Expr::simplify,
-            "Simplificacion la expresion usando reglas algebraicas");
-            
-    py::class_<heza::core::ArithmeticExpr, heza::core::Expr, heza::core::ArithmeticExprPtr>(m, "Arithmetics", "Clase base para las expresiones algebraicas y aritmeticas");
+            "Simplificacion la expresion usando reglas algebraicas")
+        .def("subs", &heza::core::Expr::subs, py::arg("subst"),
+            "Sustituye una mapa de variables en la expresion")
+        .def("is_atomic", &heza::core::Expr::is_atomic,
+            "Indica si es un nodo hoja");
 
-    py::class_<heza::numbers::NumberExpr, heza::core::ArithmeticExpr, heza::numbers::NumberExprPtr>(m, "Number", "Clase base de los numeros en HSCE")
-        .def(py::init<double>(), py::arg("value"), "Inicializa un objeto Number")
-        .def("get_value", &heza::numbers::NumberExpr::get_value,
-            "Devuelve el valor en flotante");
+    // ======================== ARITMETICAS ============================================================================================================================
+            
+    py::class_<heza::core::ArithmeticExpr, heza::core::Expr, std::shared_ptr<heza::core::ArithmeticExpr>>(m, "Arithmetics", "Clase base para las expresiones algebraicas y aritmeticas")
+        .def("__add__", &heza::core::ArithmeticExpr::add, py::arg("other"))
+        .def("__radd__", &heza::core::ArithmeticExpr::add, py::arg("other"))
+        .def("__mul__", &heza::core::ArithmeticExpr::mul, py::arg("other"))
+        .def("__rmul__", &heza::core::ArithmeticExpr::mul, py::arg("other"))
+        .def("__pow__", &heza::core::ArithmeticExpr::pow, py::arg("other"))
+        .def("diff", &heza::core::ArithmeticExpr::diff, py::arg("var"), 
+            "Deriva con respecto a la variable")
+        .def("__neg__", &heza::core::ArithmeticExpr::neg)
+        .def("is_zero", &heza::core::ArithmeticExpr::is_zero,
+            "Indica si el elemento representa un cero")
+        .def("is_one", &heza::core::ArithmeticExpr::is_one,
+            "Indica si representa un uno")
+        .def("is_negative", &heza::core::ArithmeticExpr::is_negative,
+            "Indica si la expresion es negativa")
+        .def("is_numeric", &heza::core::ArithmeticExpr::is_numeric,
+            "Indica si es una expresion numerica")
+        .def("to_double", &heza::core::ArithmeticExpr::to_double,
+            "devuelve el valor en flotante (Error si contiene variables)");
+
+    py::class_<heza::atomic::NumberExpr, heza::core::ArithmeticExpr, std::shared_ptr<heza::atomic::NumberExpr>>(m, "Number", "Clase base de los numeros en HSCE")
+        .def(py::init<double>(), py::arg("value"), "Inicializa un objeto Number");
+
+    py::class_<heza::atomic::VariableExpr, heza::core::ArithmeticExpr, std::shared_ptr<heza::atomic::VariableExpr>>(m, "Variable", "Simbolo matematico para realizar expresiones")
+        .def(py::init<std::u32string>(), py::arg("name"), "Inicializa una variable");
+
 
     // ================================================== CONJUNTOS ===========================================================================================================================================
 
-    py::class_<heza::sets::SetExpr, heza::core::Expr, heza::sets::SetExprPtr>(m, "Set", "Clase base para los conjuntos")
-        .def("contains", &heza::sets::SetExpr::contains, 
-            "Verifica si el conjunto contiene al elemento")
-        .def("is_subset", &heza::sets::SetExpr::is_subset, py::arg("other"),
-            "Verifica todos los elementos pertenecen a other")
-        .def("is_superset", &heza::sets::SetExpr::is_superset, py::arg("other"),
-            "Verifica si contiene todos los elementos de other")
-        .def("is_empty", &heza::sets::SetExpr::is_empty, 
-            "Verifica si el conjunto esta vacio")
-        .def("is_infinite", &heza::sets::SetExpr::is_infinite, 
-            "Verifica si el conjunto tiene cardinalidad infinita")
-        .def("is_disjoint", &heza::sets::SetExpr::is_disjoint, py::arg("other"), 
-            "Verifica si self y other son disjuntos")
-        .def("cardinality", &heza::sets::SetExpr::cardinality, 
-            "Devuelve la cardinalidad del conjunto")
-        .def("complement", &heza::sets::SetExpr::complement, py::arg("other"),
-            "Devuelve el conjunto complemento")
-        .def("power_set", &heza::sets::SetExpr::power_set, 
-            "Devuelve el conjunto potencia")
-        .def("union", &heza::sets::SetExpr::set_union, py::arg("other"),
-            "Crea un conjunto union con other")
-        .def("intersection", &heza::sets::SetExpr::intersect, py::arg("other"),
-            "Crea un conjunto interseccion con other")
-        .def("difference", &heza::sets::SetExpr::difference, py::arg("other"),
-            "Crea un conjunto diferencia con other")
-        .def("symetric_difference", &heza::sets::SetExpr::symetric_difference, py::arg("other"),
-            "Crea un conjunto diferencia simetrica con other")
-        .def("cartesian_product", &heza::sets::SetExpr::cartesian_product, py::arg("other"),
-            "Crea un producto cartesiano con other")
-        .def("choose", &heza::sets::SetExpr::choose, 
-            "Elije un elemento aleatorio");
+    // py::class_<heza::sets::SetExpr, heza::core::Expr, std::shared_ptr<heza::sets::SetExpr>>(m, "Set", "Clase base para los conjuntos")
+    //     .def("contains", &heza::sets::SetExpr::contains, 
+    //         "Verifica si el conjunto contiene al elemento")
+    //     .def("is_subset", &heza::sets::SetExpr::is_subset, py::arg("other"),
+    //         "Verifica todos los elementos pertenecen a other")
+    //     .def("is_superset", &heza::sets::SetExpr::is_superset, py::arg("other"),
+    //         "Verifica si contiene todos los elementos de other")
+    //     .def("is_empty", &heza::sets::SetExpr::is_empty, 
+    //         "Verifica si el conjunto esta vacio")
+    //     .def("is_infinite", &heza::sets::SetExpr::is_infinite, 
+    //         "Verifica si el conjunto tiene cardinalidad infinita")
+    //     .def("is_disjoint", &heza::sets::SetExpr::is_disjoint, py::arg("other"), 
+    //         "Verifica si self y other son disjuntos")
+    //     .def("cardinality", &heza::sets::SetExpr::cardinality, 
+    //         "Devuelve la cardinalidad del conjunto")
+    //     .def("complement", &heza::sets::SetExpr::complement, py::arg("other"),
+    //         "Devuelve el conjunto complemento")
+    //     .def("power_set", &heza::sets::SetExpr::power_set, 
+    //         "Devuelve el conjunto potencia")
+    //     .def("union", &heza::sets::SetExpr::set_union, py::arg("other"), 
+    //         "Crea un conjunto union con other")
+    //     .def("intersection", &heza::sets::SetExpr::intersect, py::arg("other"),
+    //         "Crea un conjunto interseccion con other")
+    //     .def("difference", &heza::sets::SetExpr::difference, py::arg("other"),
+    //         "Crea un conjunto diferencia con other")
+    //     .def("symetric_difference", &heza::sets::SetExpr::symetric_difference, py::arg("other"),
+    //         "Crea un conjunto diferencia simetrica con other")
+    //     .def("cartesian_product", &heza::sets::SetExpr::cartesian_product, py::arg("other"),
+    //         "Crea un producto cartesiano con other")
+    //     .def("choose", &heza::sets::SetExpr::choose, 
+    //         "Elije un elemento aleatorio");
 
-    py::class_<heza::sets::FiniteSet, heza::sets::SetExpr, heza::sets::FiniteSetPtr>(m, "FiniteSet", "Conjunto con una cantidad finita de elementos")
-        .def(py::init<std::set<heza::core::ExprPtr>&>(), py::arg("values"), "Inicializa un conjunto");
+    // py::class_<heza::sets::FiniteSet, heza::sets::SetExpr, std::shared_ptr<heza::sets::FiniteSet>>(m, "FiniteSet", "Conjunto con una cantidad finita de elementos")
+    //     .def(py::init<std::vector<heza::core::ExprPtr>&>(), py::arg("values"), "Inicializa un conjunto");
 
-    py::class_<heza::sets::SetUnion, heza::sets::SetExpr, heza::sets::SetUnionPtr>(m, "SetUnion", "Union de conjuntos")
-        .def(py::init<const heza::sets::SetExprPtr&, const heza::sets::SetExprPtr&>(), py::arg("left"), py::arg("right"), "Inicializa una union de conjuntos");
+    // py::class_<heza::sets::SetUnion, heza::sets::SetExpr, std::shared_ptr<heza::sets::SetUnion>>(m, "SetUnion", "Union de conjuntos")
+    //     .def(py::init<const heza::sets::SetExprPtr&, const heza::sets::SetExprPtr&>(), py::arg("left"), py::arg("right"), "Inicializa una union de conjuntos");
 
-    py::class_<heza::sets::SetIntersection, heza::sets::SetExpr, heza::sets::SetIntersectionPtr>(m, "SetIntersection", "Interseccion de conjuntos")
-        .def(py::init<const heza::sets::SetExprPtr&, const heza::sets::SetExprPtr&>(), py::arg("left"), py::arg("right"), "Inicializa una interseccion de conjuntos");
+    // py::class_<heza::sets::SetIntersection, heza::sets::SetExpr, std::shared_ptr<heza::sets::SetIntersection>>(m, "SetIntersection", "Interseccion de conjuntos")
+    //     .def(py::init<const heza::sets::SetExprPtr&, const heza::sets::SetExprPtr&>(), py::arg("left"), py::arg("right"), "Inicializa una interseccion de conjuntos");
 
-    py::class_<heza::sets::SetDifference, heza::sets::SetExpr, heza::sets::SetDifferencePtr>(m, "SetDifference", "Diferencia de conjuntos")
-        .def(py::init<const heza::sets::SetExprPtr&, const heza::sets::SetExprPtr&>(), py::arg("left"), py::arg("right"), "Inicializa una diferencia de conjuntos");
+    // py::class_<heza::sets::SetDifference, heza::sets::SetExpr, std::shared_ptr<heza::sets::SetDifference>>(m, "SetDifference", "Diferencia de conjuntos")
+    //     .def(py::init<const heza::sets::SetExprPtr&, const heza::sets::SetExprPtr&>(), py::arg("left"), py::arg("right"), "Inicializa una diferencia de conjuntos");
 
-    // ==================================================================== TUPLAS =====================================================================================================================================
+    // // ==================================================================== TUPLAS =====================================================================================================================================
 
-    py::class_<heza::core::TupleExpr, heza::core::Expr, heza::core::TupleExprPtr>(m, "Tuple", "n-upla (conjunto de expresiones ordenadas)")
-        .def(py::init<std::vector<heza::core::ExprPtr>&>(), py::arg("values"), "Inicializa una n-upla")
-        .def("extract", &heza::core::TupleExpr::extract, py::arg("index"), 
-            "Extrae el elemento en la posicion index")
-        .def("cardinality", &heza::core::TupleExpr::cardinality,
-            "Devuelve el tamaño de la tupla");
+    // py::class_<heza::core::TupleExpr, heza::core::Expr, std::shared_ptr<heza::core::TupleExpr>>(m, "Tuple", "n-upla (conjunto de expresiones ordenadas)")
+    //     .def(py::init<std::vector<heza::core::ExprPtr>&>(), py::arg("values"), "Inicializa una n-upla")
+    //     .def("extract", &heza::core::TupleExpr::extract, py::arg("index"), 
+    //         "Extrae el elemento en la posicion index")
+    //     .def("cardinality", &heza::core::TupleExpr::cardinality,
+    //         "Devuelve el tamaño de la tupla");
+            
+}
 
     // // ==========================================
     // // CLASE BASE: heza::core::Expr
@@ -254,7 +284,6 @@ PYBIND11_MODULE(HSCE, m) {
     // m.attr("e") = heza::core::make_e();
     // m.attr("inf") = heza::core::make_inf();
     // m.attr("i") = heza::core::make_i();
-}
 
 /*
 Lista completa de Clases en C++

@@ -1,4 +1,5 @@
 #include <heza/core/tuple.hpp>
+#include <heza/atomic/number.hpp>
 
 namespace heza::core {
     
@@ -23,7 +24,7 @@ namespace heza::core {
     };
 
     bool TupleExpr::is_equal(const ExprPtr& other) const {
-        auto other_tuple = std::dynamic_pointer_cast<TupleExpr>(other);
+        auto other_tuple = std::dynamic_pointer_cast<const TupleExpr>(other);
         if(!other_tuple){
             throw std::runtime_error("Cannot converted");
         }
@@ -61,14 +62,36 @@ namespace heza::core {
     };
 
     heza::core::ArithmeticExprPtr TupleExpr::cardinality() const {
-        return heza::core::make_number(items_.size());
+        return heza::atomic::make_number(items_.size());
     };
 
-    heza::core::ExprPtr TupleExpr::extract(int index) {
+    heza::core::ExprPtr TupleExpr::extract(int index) const {
         if(index < 0 || index >= items_.size()){
             throw std::runtime_error("Index out of bounds");
         }
         return items_[index];
+    };
+
+    int TupleExpr::compare(const heza::core::Expr& other) const {
+        if(get_type_id() != other.get_type_id()) {
+            return static_cast<int> (get_type_id()) < static_cast<int>(other.get_type_id()) ? -1 : 1;
+        }
+
+        auto other_tuple = static_cast<const TupleExpr *>(&other);
+
+        return -1;
+    };
+
+    heza::core::TypeId TupleExpr::get_type_id() const {
+        return heza::core::TypeId::TUPLE;
+    };
+
+    heza::core::ExprPtr TupleExpr::subs(const heza::core::Substitution& subst) const {
+        for(auto t : items_) t->subs(subst);
+    };
+
+    bool TupleExpr::is_atomic() const {
+        return false;
     };
 
 }

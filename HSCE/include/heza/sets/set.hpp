@@ -8,7 +8,7 @@
 namespace heza::sets {
 
     class SetExpr;
-    using SetExprPtr = std::shared_ptr<SetExpr>;
+    using SetExprPtr = std::shared_ptr<const SetExpr>;
 
     SetExprPtr expr_to_set(const heza::core::ExprPtr& expr);
 

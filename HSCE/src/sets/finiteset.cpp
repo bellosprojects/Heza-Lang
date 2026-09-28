@@ -1,4 +1,5 @@
 #include <heza/sets/finiteset.hpp>
+#include <heza/atomic/number.hpp>
 
 namespace heza::sets {
 
@@ -28,7 +29,7 @@ namespace heza::sets {
 
     bool FiniteSet::is_equal(const heza::core::ExprPtr& other) const {
 
-        auto other_set = std::dynamic_pointer_cast<FiniteSet>(other);
+        auto other_set = std::dynamic_pointer_cast<const FiniteSet>(other);
         if(!other_set) return false;
 
         if(!cardinality()->is_equal(other_set->cardinality())) return false;
@@ -99,7 +100,7 @@ namespace heza::sets {
     };
 
     heza::core::ArithmeticExprPtr FiniteSet::cardinality() const {
-        return heza::core::make_number(items_.size());
+        return heza::atomic::make_number(items_.size());
     };
 
     SetExprPtr FiniteSet::complement(const SetExprPtr& universal) const {

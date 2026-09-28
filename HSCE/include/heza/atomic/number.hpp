@@ -1,23 +1,19 @@
 #pragma once
 
 #include <heza/core/arithmetic.hpp>
-#include <utility>
 
-namespace heza::algebra {
+namespace heza::atomic {
 
-    class MulExpr;
-    using MulExprPtr = std::shared_ptr<const MulExpr>;
+    class NumberExpr;
+    using NumberExprPtr = std::shared_ptr<const NumberExpr>;   // ← const
 
-    class MulExpr : public heza::core::ArithmeticExpr {
+    class NumberExpr : public heza::core::ArithmeticExpr {
     private:
-        std::vector<heza::core::ArithmeticExprPtr> factors_;
+        double value_;
 
     public:
-        explicit MulExpr(std::vector<heza::core::ArithmeticExprPtr> factors);
+        explicit NumberExpr(double value) : value_(value) {}
 
-        const std::vector<heza::core::ArithmeticExprPtr>& get_factors() const { return factors_; }
-
-        // --- Expr ---
         std::string    to_str()    const override;
         std::u32string to_latex()  const override;
         bool is_equal(const heza::core::ExprPtr& other) const override;
@@ -25,35 +21,30 @@ namespace heza::algebra {
         heza::core::ExprPtr simplify() const override;
         void accept(const heza::core::VisitorPtr& visitor) const override;
         size_t hash() const override;
+
         int compare(const heza::core::Expr& other) const override;
         heza::core::TypeId get_type_id() const override;
         heza::core::ExprPtr subs(const heza::core::Substitution& subst) const override;
         bool is_atomic() const override;
 
-        // --- ArithmeticExpr ---
         heza::core::ArithmeticExprPtr add(const heza::core::ArithmeticExprPtr& other) const override;
         heza::core::ArithmeticExprPtr mul(const heza::core::ArithmeticExprPtr& other) const override;
         heza::core::ArithmeticExprPtr pow(const heza::core::ArithmeticExprPtr& other) const override;
         heza::core::ArithmeticExprPtr neg() const override;
+
         heza::core::ArithmeticExprPtr diff(const heza::atomic::VariableExprPtr& var) const override;
+
         bool is_zero()     const override;
         bool is_one()      const override;
         bool is_negative() const override;
         bool is_positive() const override;
         bool is_numeric()  const override;
+
         double to_double() const override;
 
-    private:
-        heza::core::ArithmeticExprPtr simplify_impl() const;
-
-        // Descompone un factor en (base, exponente). Ej: x^2 → (x, 2); x → (x, 1).
-        static std::pair<heza::core::ArithmeticExprPtr, heza::core::ArithmeticExprPtr>
-        extract_base_exp(const heza::core::ArithmeticExprPtr& factor);
-
-        // Reconstruye un factor desde (base, exponente).
-        static heza::core::ArithmeticExprPtr
-        build_factor(const heza::core::ArithmeticExprPtr& base,
-                     const heza::core::ArithmeticExprPtr& exp);
+        double get_value() const { return value_; }
     };
 
-} // namespace heza::algebra
+    heza::core::ArithmeticExprPtr make_number(double v);
+
+} // namespace heza::atomic

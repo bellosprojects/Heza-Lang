@@ -4,7 +4,7 @@
 namespace heza::sets {
 
     class SetIntersection;
-    using SetIntersectionPtr = std::shared_ptr<SetIntersection>;
+    using SetIntersectionPtr = std::shared_ptr<const SetIntersection>;
 
     class SetIntersection : public SetExpr {
 

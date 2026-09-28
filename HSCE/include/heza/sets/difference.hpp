@@ -4,7 +4,7 @@
 namespace heza::sets {
 
     class SetDifference;
-    using SetDifferencePtr = std::shared_ptr<SetDifference>;
+    using SetDifferencePtr = std::shared_ptr<const SetDifference>;
 
     class SetDifference : public SetExpr {
 

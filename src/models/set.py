@@ -10,6 +10,20 @@ class HezaSet:
         else:
             self.values.add(new_value)
 
+    def get(self, index):
+
+        from .number import Number
+
+        if not isinstance(index, Number):
+            raise TypeError("Se esperaba un numero como indice")
+
+        index = index.value
+
+        if index < 0 or index >= len(self.values):
+            raise IndexError("Indice fuera de los limites")
+
+        return list(self.values)[index]
+
     def union(self, other):
         if not isinstance(other, HezaSet):
             raise TypeError(f"No se puede unir con {type(other)}")
@@ -98,9 +112,6 @@ class HezaSet:
     def __eq__(self, other):
         if not isinstance(other, HezaSet):
             return False
-        # Comparar los valores de ambos conjuntos (orden importa si son listas)
-        # Si quieres que sean conjuntos sin orden, deberías usar sets, pero como es una lista,
-        # comparamos elemento por elemento en orden.
         if len(self.values) != len(other.values):
             return False
         return self.values == other.values

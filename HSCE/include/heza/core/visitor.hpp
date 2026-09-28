@@ -5,7 +5,7 @@
 namespace heza::core {
 
     class Visitor;
-    using VisitorPtr = std::shared_ptr<Visitor>;
+    using VisitorPtr = std::shared_ptr<const Visitor>;
 
     class Visitor {
         public:

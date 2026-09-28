@@ -8,15 +8,15 @@
 namespace heza::sets {
 
     class FiniteSet;
-    using FiniteSetPtr = std::shared_ptr<FiniteSet>;
+    using FiniteSetPtr = std::shared_ptr<const FiniteSet>;
 
     class FiniteSet : public SetExpr {
 
         private:
-            std::set<heza::core::ExprPtr> items_;
+            std::vector<heza::core::ExprPtr> items_;
 
         public:
-            FiniteSet(std::set<heza::core::ExprPtr>& items): items_(items) {};
+            FiniteSet(std::vector<heza::core::ExprPtr>& items): items_(items) {};
 
             std::string to_str() const;
             std::u32string to_latex() const;

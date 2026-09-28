@@ -4,7 +4,7 @@
 namespace heza::sets {
 
     class SetUnion;
-    using SetUnionPtr = std::shared_ptr<SetUnion>;
+    using SetUnionPtr = std::shared_ptr<const SetUnion>;
 
     class SetUnion : public SetExpr {
 
