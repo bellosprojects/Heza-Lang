@@ -1,0 +1,6 @@
+e = '((x + h) ^ 2 - x ^ 2) / h'
+
+Sys.out << lim(e, h → 0)
+
+~ Esta es una derivada por definicion
+~ Imprime: 2 * x"

@@ -1,0 +1,12 @@
+e = 'y ^ 2 + 5 * x - 4'
+
+Sys.out << d(e)/dy   ~ Imprime: 2 * y + 5
+
+~ Ojo, esa derivada sigue siendo un objeto Expresion
+~ Asi no dependa de y
+~ Para usarla como numero se debe evaluar
+
+~ Mas Ejemplos
+
+h(x, y) = x + y - x * y
+Sys.out << d(h('x', 'y'))/dy  ~ Imprime: 1 - x"

@@ -1,0 +1,41 @@
+~ Para declarar un objeto usamos la keyword object segida del nombre
+~ dentro de los {} listamos sus atributos
+
+object objectoNombre { attrs }
+
+
+~ Ejemplo
+
+~ Cuando no asignamos un valor de inicio a los atributos estos tienen Null
+object Persona {
+    CI, nombre
+}
+
+
+~ Tambien podemos asignarles un valor inicial
+
+object Point {
+    x = 0,
+    y = 0
+}
+
+
+~ Luego para usarlos solo se nombran
+p1 = Point
+
+~ Y modificamos sus valores
+p1.x = 4
+p1.y = 5
+
+
+~ O Tambien podemos asignarlos durante la instanciacion del objeto
+p2 = Point {
+    x = 6,
+    y = 8
+}
+
+
+~ Podemos acceder y modificar sus valores con el operador punto (.)
+Sys.out << p1.x
+
+p2.y = 18

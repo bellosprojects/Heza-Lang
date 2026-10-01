@@ -1,0 +1,18 @@
+~ La notacion es
+
+A = {x ∈ Set: f(x)}
+
+~ Se lee como:
+~ los elementos pertenecientes al conjunto que cumplen la condicion f
+
+
+~ Ejemplos:
+
+~ Se queda solo con los valores mayores a 5
+A = {x ∈ [1..10]: x > 5}
+
+
+~ Elementos cuya imagen de f sea positiva
+f(x) = x ^ 2 - 4 * x + 3
+
+B = {i ∈ A: f(i) > 0}

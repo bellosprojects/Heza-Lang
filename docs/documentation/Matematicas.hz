@@ -1,0 +1,15 @@
+~ Trigonometricas basicas
+~ Usan angulos en radianes (180° = pi / 2)
+
+sin(x)
+cos(x)
+tan(x)
+cot(x)
+sec(x)
+csc(x)
+
+
+~ Exponenciales y logaritmicas
+
+exp(x)
+ln(x)

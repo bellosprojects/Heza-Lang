@@ -1,0 +1,27 @@
+Sys.in >> x, y
+
+~ Varios caminos
+
+~ El primero solo lleva if (condicion) { ... }
+if (x > y) {
+    Sys.out << "x es mayor que y"
+} 
+
+~ Si hay mas llevan else if para verificar que no se haya cumplido el anterior
+else if (y > x) {
+    Sys.out << "y es mayor que x"
+} 
+
+~ El ultimo (si corresponde) solo lleva else, se ejecuta si ninguna condicion se cumple
+else {
+    Sys.out << "x e y son iguales"
+}
+
+
+~ Ejemplo de accion condicional simple
+
+theme = "dark"
+
+if (theme == "dark") {
+    applyDarkTheme()
+}

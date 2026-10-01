@@ -126,7 +126,6 @@ keyword = [
     'from',
 
     # Estas no son keywords pero se pasan como tales para simular los simbolos matematicos cuando el editor no los pide
-    'in',
     'and',
     'or',
     'summation',

@@ -1,0 +1,4 @@
+f(x) = x ^ 2 - 2
+
+~Se llama como a una funcion normal
+Sys.out << f(4) ~ Imprime 14

@@ -1,0 +1,16 @@
+~ La forma general es: 
+A = [fromValue .. toValue : step]
+
+~ Si step no se especifica se asume como 1
+
+~ Ejemplos: 
+
+A = [1..10]    ~ Los numeros del 1 al 10 (incluyendo ambos)
+B = [1..100 : 5]  ~ Los numeros iniciando en 1, saltando 5 unidades hasta al 100
+
+~ Este ultimo queda: {1, 6, 11, ..., 86, 91, 96}
+
+~ Tambien pueden estar de forma decreciente:
+C = [10..0 : -2]
+
+~ Es importante que si fromValue > toValue, step debe ser negativo'

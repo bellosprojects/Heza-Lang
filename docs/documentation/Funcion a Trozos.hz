@@ -1,0 +1,13 @@
+f(x) = {
+    x if x >= 0,
+    -x  ~Este es el valor por defecto
+}
+
+~ Todas las funciones a trozos deben tener un valor por defecto
+~ Es el valor que se retorna si no se cumple ninguna condicion
+
+compare(x,y) = {
+    1 if x > y,
+    -1 if y > x,
+    0
+}

@@ -1,0 +1,10 @@
+~ Devuelve true si la tecla key esta presionada en ese momento
+pressed(key)
+
+
+~ Devuelve un numero aleatorio entre min y max (incluyendo ambos)
+rand(min, max)
+
+
+~ Duerme el programa por ms segundos
+sleep(ms)

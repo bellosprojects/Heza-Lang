@@ -1,0 +1,7 @@
+cont = 10
+
+while(cont > 0) do {
+    Sys.out << cont
+    
+    cont = cont + 1
+}

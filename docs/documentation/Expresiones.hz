@@ -1,0 +1,9 @@
+~ Usamos comillas simples para delimitarlas
+
+expr = 'x - 2' ~No importa cuanto vale x o si no existe
+
+~ Se pueden usar como parametros
+
+E(x) = x ^ 2 + 5 * x - 4
+
+E('y') ~ Esto vale 'y ^ 2 + 5 * y - 4'

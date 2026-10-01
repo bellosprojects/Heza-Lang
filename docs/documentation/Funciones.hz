@@ -1,0 +1,41 @@
+fun saludar(nombre){
+    Sys.out << "Hola " + nombre
+}
+
+~Ahora podemos llamar a la funcion saludar con un valor especifico
+
+saludar("Mundo!") ~ Imprime Hola Mundo!
+
+
+~ Una funcion tambien puede retornar uno o mas valores
+
+fun saludar(nombre){
+    saludo = "Hola " + nombre
+    return saludo
+}
+
+saludo = saludar("Heza")
+Sys.out << saludo
+
+
+~ Otro ejemplo de retorno
+
+fun stats(data) {
+    min = 0  max = 0
+
+    ∀ x ∈ data do {
+        min = if x < min x else min
+        max = if x > max x else max
+    }
+
+    return min, max
+}
+
+min, max = stats({1,2,3,4,5,6,7,8})
+
+~ Tambien se devuelve una tupla si una sola variable espera el resultado
+s = stats([1..10]) ~ S ahora es el par (min, max)
+
+
+~ Si hay mas de una variable esperando, y el numero de variables destino
+~ No es igual al numero de valores retornados habra un error en tiempo de ejecucion

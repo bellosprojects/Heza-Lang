@@ -1,0 +1,7 @@
+Sys.in >> x    ~ Espera a que ingreser un valor y x lo toma
+
+~ Tambien puedes leer varias variables
+Sys.in >> x, y, z
+~ El interprete les dara los valores uno a uno a medida que los ingreses
+
+~ No es necesario haber declarado la(s) variable anteriormente

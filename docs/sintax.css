@@ -1,0 +1,50 @@
+.comment {
+    color: #888;
+    font-style: italic;
+}
+
+.number {
+    color: rgb(71, 190, 71);
+}
+
+.string {
+    color: rgb(240, 134, 178);
+    font-style: oblique;
+    font-weight: lighter;
+}
+
+.expression {
+    color: cyan;
+}
+
+.operator {
+    color: rgb(201, 108, 46);
+}
+
+.keyword {
+    color: rgb(53, 108, 226);
+}
+
+.constant {
+    color: rgb(164, 83, 240);
+}
+
+.diferential{
+    font-weight: bold;
+    color: brown;
+}
+
+.function {
+    color: rgb(240, 191, 29);
+}
+
+.special, .special2 {
+    font-weight: bold;
+    color: rgb(143, 233, 58);
+}
+
+pre, code {
+    white-space: pre;
+    font-family: 'Fira Code', monospace;
+    font-size: 1rem;
+}

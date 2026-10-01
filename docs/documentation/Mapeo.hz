@@ -1,0 +1,21 @@
+~ La notacion es
+
+A = {f(x) | x ∈ Set : g(x)}
+
+~ Donde:
+~ f es la funcion a aplicar
+~ x es la variable iteradora
+~ Set es el conjunto de donde se toman los valores
+~ g es la funcion de condicion (true si no se especifica)
+
+
+~ Ejemplo
+
+~ Los pares ordenados (x, x + 1) donde x = 1, ... , 10
+A = {(x, x + 1) | x ∈ [1..10]}
+
+
+~ El cuadrado de los pares pertenecientes a H
+H = {1, 4, 7, 8, 11, 12, 15, 18, 22}
+
+G = {i ^ 2 | i ∈ H : i % 2 == 0}

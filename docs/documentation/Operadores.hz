@@ -1,0 +1,49 @@
+~ Aritmeticos Basicos
+
+a + b   ~ Suma
+a - b   ~ Resta
+a * b   ~ Multiplicacion
+a / b   ~ Division
+a ^ b   ~ Potencia
+
+
+~ Logicos
+
+¬ a     ~ true si a es false
+a ∧ b   ~ true si a y b son true
+a ∨ b   ~ true si a o b son true
+a → b   ~ Se opera ¬ a ∨ b
+
+
+~ Relacionales
+
+a == b  ~ true si a es igual a b
+a ≠ b   ~ true si a es distinto de b
+a > b   ~ Mayor que
+a >= b  ~ Mayor o igual que
+a < b   ~ Menor que
+a <= b  ~ Menor o igual que
+
+~ De Conjutnos
+
+a ∈ A   ~ true si a pertenece al conjunto A
+A ⊂ B   ~ true si todos los elementos de A estan en B
+A ⋂ B   ~ Los elementos que estan en A y B
+A ∪ B   ~ Los elementos que estan en A o B
+A - B   ~ Los elementos que estan en A y no en B
+A ∆ B   ~ Los elementos que estan en A o B pero no en ambos
+A ⨉ B   ~ Producto cartesiano entre A y B
+
+
+~ Iteradores
+
+∀x ∈ A: f(x)    ~ true si todos los elementos de A cumplen la condicion f
+∃x ∈ A: f(x)    ~ true si al menos un elemento de A cumplen la condicion f
+
+∑(i ∈ A, f(i))  ~ La suma de todos los f(i) tales que i ∈ A
+∏(i ∈ A, f(i))  ~ El producto de todos los f(i) tales que i ∈ A
+
+
+~ Ternario
+
+if cond val1 else val2  ~ val1 si cond es verdadera, val2 en otro caso
