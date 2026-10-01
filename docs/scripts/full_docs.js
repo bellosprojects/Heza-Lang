@@ -35,7 +35,7 @@ const DOCS_FULL = {
         "name": "Funcion Pura",
         "description": "Una funcion de n parametros comun de matematicas"
     },{
-        "name": "Funcion a trozos",
+        "name": "Funcion Trozos",
         "description": "Es una funcion que puede tomar distintos comportamiento dependiendo del valor de los parametros"
     }],
     "Expresiones Simbolicas": [{
@@ -52,7 +52,7 @@ const DOCS_FULL = {
         "description": "Evalua el limite de una expresion cuando una variable tiende a un valor especificado"
     }],
     "Conjuntos": [{
-        "name": "Conjuntos por extension",
+        "name": "Conjuntos Extension",
         "description": "Declaras uno a uno los elementos que pertenecen al conjunto"
     }, {
         "name": "Rangos",
