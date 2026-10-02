@@ -1,0 +1,48 @@
+~ Para declararlas usamos la sintaxis &(expr)
+
+x = 5
+
+ref = &(x + 10)     ~ ref no vale 15, vale x + 10
+
+x = 10              ~ ref aun no se actualiza, sigue valiendo x + 10
+
+Sys.out << ref      ~ Esto si imprime 20
+
+
+~ En teoria se puede sustituir por una funcion pero tienen enfoques distintos
+~ Las referencias no equieren parametros, lo que hace mas limpio el codigo
+~ Buscan el valor de la variable en el scope actual (no en el declarado)
+
+~ Ejemplo
+
+pos = &("X: " + px + " Y: " + py)
+
+~ No da error aunque px y py no existan, pero si se necesitan cuando se usa el valor
+
+px, py = (1, 3)
+
+Sys.out << pos      ~ Aqui se imprime todo el str formateado de forma limpia sin parametros
+
+~ Cabe destacar que estas estructuras se desreferencian automaticamente cuando se busca el valor
+~ Para anidar referencias hay que crear otra referencia explicitamente
+
+~ Ejemplo
+
+pos2 = &(pos + " Z: " + pz)
+
+px, py, pz = (9, 8, 7)
+
+Sys.out << pos2     ~ Busca el AST de pos2 y encuentra que pos tambien es una referencia
+                    ~ Entonces lee su AST y busca los valores
+
+
+~ Esto no funciona
+ref2 = pos2 + " (pixels)"
+
+~ ref2 almacena el valor actual de pos2 y lo contatena con " (pixeles)"
+~ Si pos2 se actualiza ref2 no cambia
+
+px, py, pz = (5, 5, 5)
+
+Sys.out << pos2     ~ pos2 cambio
+Sys.out << ref2     ~ ref2 sigue valiendo "X: 9 Y: 8 Z: 7 (pixels)"
