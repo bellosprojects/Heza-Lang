@@ -422,3 +422,6 @@ class Null:
         from .number import Number
 
         return Number(1)
+
+    def __hash__(self) -> int:
+        return hash(self.__str__())

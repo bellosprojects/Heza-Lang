@@ -291,3 +291,6 @@ class Indeterminate:
     
     def to_abs(self):
         raise TypeError("El objeto ∄ no puede convertirse a valor absoluto")
+
+    def __hash__(self) -> int:
+        return hash("∄")

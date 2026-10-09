@@ -15,4 +15,13 @@ class Reference:
         return f"Reference({self.value['type']})"
 
     def print(self, scope):
-        return self.evaluate(scope)
+
+        return self.evaluate(scope, None).print(scope)
+
+    def to_bool(self):
+
+        from .bool import Bool
+        return Bool(True)
+
+    def __hash__(self) -> int:
+        return hash("Ref" + str(self.value))

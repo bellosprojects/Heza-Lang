@@ -16,7 +16,7 @@ namespace heza::sets {
             std::vector<heza::core::ExprPtr> items_;
 
         public:
-            FiniteSet(std::vector<heza::core::ExprPtr>& items): items_(items) {};
+            FiniteSet(const std::vector<heza::core::ExprPtr>& items): items_(items) {};
 
             std::string to_str() const;
             std::u32string to_latex() const;
@@ -38,6 +38,11 @@ namespace heza::sets {
             SetExprPtr symetric_difference(const SetExprPtr& other) const;
             SetExprPtr cartesian_product(const SetExprPtr& other) const;
             heza::core::ExprPtr choose() const;
+
+            int compare(const heza::core::Expr& other) const;
+            heza::core::TypeId get_type_id() const;
+            heza::core::ExprPtr subs(const heza::core::Substitution& subst) const;
+            bool is_atomic() const;
     };
 
 };

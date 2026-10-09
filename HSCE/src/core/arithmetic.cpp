@@ -8,7 +8,7 @@ namespace heza::core {
 
     ArithmeticExprPtr expr_to_arithmetic(const heza::core::ExprPtr& expr){
         auto arithmetic = std::static_pointer_cast<const ArithmeticExpr>(expr);
-        if (arithmetic) {
+        if (!arithmetic) {
             throw std::runtime_error("Cannot converted");
         }
         return arithmetic;

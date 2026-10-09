@@ -4,10 +4,11 @@ class Block:
         self.args = args
         self.body = body
 
+
 class HezaBlock:
     """Objeto invocable que envuelve un bloque definido con 'fun'."""
     def __init__(self, block_def, closure):
-        self.block_def = block_def   # instancia de Block
+        self.block_def : Block = block_def   # instancia de Block
         self.closure = closure       # Scope donde fue definido
 
     def call(self, args, interpreter):
@@ -34,3 +35,14 @@ class HezaBlock:
         finally:
             interpreter.scope = old_scope
         return None
+
+    def __hash__(self) -> int:
+        return hash(",".join(self.block_def.args + str(self.block_def.body)))
+    
+    def to_bool(self):
+
+        from .bool import Bool
+        return Bool(True)
+
+    def print(self):
+        return "Block(" + ", ".join(self.block_def.args) + ")"

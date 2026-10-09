@@ -23,4 +23,8 @@ namespace heza::sets {
         return std::make_shared<SetDifference>(self, other);
     };
 
+    SetExprPtr expr_to_set(const heza::core::ExprPtr& expr){
+        return std::static_pointer_cast<const SetExpr>(expr);
+    }
+
 }

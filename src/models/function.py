@@ -8,7 +8,6 @@ class Function:
 
         from utils import evaluate_node_from_scope
 
-        final = None
         for i in self.expresions:
             if evaluate_node_from_scope(i['condition'], scope):
                 return evaluate_node_from_scope(i['expresion'], scope)
@@ -18,7 +17,7 @@ class Function:
 class HezaFunction:
     """Objeto invocable para funciones definidas con 'function' (a trozos)."""
     def __init__(self, func_def, closure):
-        self.func_def = func_def
+        self.func_def : Function = func_def
         self.closure = closure
 
     def call(self, args, interpreter):
@@ -36,3 +35,14 @@ class HezaFunction:
             if cond.to_bool():
                 return evaluate_node_from_scope(expr['expresion'], new_scope, interpreter)
         return None
+
+    def __hash__(self) -> int:
+        return hash(self.func_def.args + str(self.func_def.expresions))
+
+    def to_bool(self):
+
+        from .bool import Bool
+        return Bool(True)
+
+    def print(self):
+        return "Fun(" + ", ".join(self.func_def.args) + ")"

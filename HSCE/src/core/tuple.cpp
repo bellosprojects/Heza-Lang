@@ -87,7 +87,14 @@ namespace heza::core {
     };
 
     heza::core::ExprPtr TupleExpr::subs(const heza::core::Substitution& subst) const {
-        for(auto t : items_) t->subs(subst);
+        
+        std::vector<ExprPtr> substituted;
+
+        for(auto item : items_){
+            substituted.push_back(item->subs(subst));
+        }
+
+        return std::make_shared<TupleExpr>(substituted);
     };
 
     bool TupleExpr::is_atomic() const {

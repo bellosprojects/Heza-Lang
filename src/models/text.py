@@ -122,3 +122,6 @@ class Text:
         if not isinstance(value, Text):
             raise ValueError("El objeto Text solo se puede comparar con objetos del mismo tipo")
         return value.value == self.value
+
+    def __hash__(self) -> int:
+        return hash(self.value)

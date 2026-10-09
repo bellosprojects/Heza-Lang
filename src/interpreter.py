@@ -229,7 +229,7 @@ class Interpreter:
 
         values = [evaluate_node_from_scope(value, self.scope, self) for value in command['values']]
 
-        self.sys.print(values)
+        self.sys.print(values, self.scope)
 
     def fun(self, command, scope: models.Scope | None = None):
         insert_scope = scope if scope  else self.scope

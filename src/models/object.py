@@ -69,6 +69,9 @@ class HezaObject:
     def __repr__(self):
         return f"Object({self.attributes})"
 
+    def __hash__(self) -> int:
+        return hash(f"Object[{self.name}]:({",".join(self.attributes)})")
+
     def print(self, scope):
         # Para el método print en conjuntos, podemos reutilizar to_text
         return self.to_text().value

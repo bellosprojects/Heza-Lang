@@ -706,3 +706,6 @@ class Infinite:
         """
 
         return Infinite(1)
+
+    def __hash__(self) -> int:
+        return hash(self.__str__())

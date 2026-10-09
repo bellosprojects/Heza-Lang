@@ -81,4 +81,23 @@ namespace heza::sets {
         return nullptr;
     };
 
+    int SetUnion::compare(const heza::core::Expr& other) const {
+        
+        return 1;
+
+    }
+
+    heza::core::TypeId SetUnion::get_type_id() const {
+        return heza::core::TypeId::SETUNION;
+    }
+
+    heza::core::ExprPtr SetUnion::subs(const heza::core::Substitution& subst) const {
+
+        return std::make_shared<SetUnion>(expr_to_set(left_->subs(subst)), expr_to_set(right_->subs(subst)));
+    }
+
+    bool SetUnion::is_atomic() const {
+        return false;
+    }
+
 };

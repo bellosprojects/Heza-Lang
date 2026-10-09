@@ -79,4 +79,23 @@ namespace heza::sets {
         return nullptr;
     };
 
+    int SetDifference::compare(const heza::core::Expr& other) const {
+        
+        return 1;
+
+    }
+
+    heza::core::TypeId SetDifference::get_type_id() const {
+        return heza::core::TypeId::SETDIFFERENCE;
+    }
+
+    heza::core::ExprPtr SetDifference::subs(const heza::core::Substitution& subst) const {
+
+        return std::make_shared<SetDifference>(expr_to_set(left_->subs(subst)), expr_to_set(right_->subs(subst)));
+    }
+
+    bool SetDifference::is_atomic() const {
+        return false;
+    }
+
 };

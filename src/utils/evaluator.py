@@ -43,7 +43,7 @@ def evaluate_node_from_scope(node: dict, scope : Scope, interpreter = None):
         return HezaTuple(values)
 
     elif type == 'set':
-        values = [evaluate_node_from_scope(value, scope, interpreter) for value in node['value']]
+        values = {evaluate_node_from_scope(value, scope, interpreter) for value in node['value']}
         return HezaSet(values)
     elif type == 'range':
         from_value = evaluate_node_from_scope(node['fromValue'], scope, interpreter)
@@ -90,13 +90,13 @@ def evaluate_node_from_scope(node: dict, scope : Scope, interpreter = None):
     
     elif type == 'attribute_access':
         obj = evaluate_node_from_scope(node['object'], scope, interpreter)
-        from src.models.object import HezaObject
+        from models.object import HezaObject
         if not isinstance(obj, HezaObject):
             raise TypeError("Se intenta acceder a un atributo de un objeto que no es HezaObject")
         return obj.get(node['attribute'])
     
     elif type == 'object_instantiation':
-        from src.models.object import HezaObject
+        from models.object import HezaObject
         obj_name = node['object_name']
         try:
             obj_def = scope.get_object(obj_name)
@@ -113,7 +113,7 @@ def evaluate_node_from_scope(node: dict, scope : Scope, interpreter = None):
         return new_obj
     
     elif type == 'method_call':
-        from src.models.object import HezaObject
+        from models.object import HezaObject
         obj = evaluate_node_from_scope(node['object'], scope, interpreter)
         if not isinstance(obj, HezaObject):
             raise TypeError("Se intenta llamar un método de un objeto que no es HezaObject")
@@ -156,7 +156,7 @@ def evaluate_node_from_scope(node: dict, scope : Scope, interpreter = None):
             if callee_node['type'] == 'id':
                 func_name = callee_node['value']
                 
-                import src.utils.funs as funs
+                import utils.funs as funs
 
                 if hasattr(funs, func_name):
                     func = getattr(funs, func_name)
@@ -257,13 +257,13 @@ def evaluate_node_from_scope(node: dict, scope : Scope, interpreter = None):
         return final
 
     elif type == 'filter':
-        set = evaluate_node_from_scope(node['set'], scope, interpreter).to_set()
+        set_ = evaluate_node_from_scope(node['set'], scope, interpreter).to_set()
 
         filtered_set = HezaSet({})
 
         scope = Scope(scope)
 
-        for i in set.values:
+        for i in set_.values:
 
             scope = Scope(scope)
             scope.add_var(node['var'], i)

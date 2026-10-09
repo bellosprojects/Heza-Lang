@@ -356,7 +356,7 @@ class Expresion:
             Set: Resultado de la expresion en formato conjunto
         """
 
-        return Set([self])
+        return Set({self})
     
     def to_infinite(self):
         from .infinite import Infinite
@@ -662,8 +662,8 @@ class Expresion:
 
         raise TypeError("Los objetos expresion no se pueden comparar, intenta conseguir el valor numerico y luego comparar")
 
-    def print(self, scope):
-        return f"'{str(self.value)}'" if scope.mode == "CONSOLE" else str(self.value)
+    def print(self, _):
+        return f"'{str(self.value)}'"
 
     def __hash__(self):
         return hash(self.value)

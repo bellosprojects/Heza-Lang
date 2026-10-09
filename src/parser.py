@@ -314,12 +314,13 @@ class Parser:
 
     def parse_binary_operation_sets(self):
         left = self.parse_convertions()
-        while self.current_token is not None and self.current_token[0] in ['UNION','INTERSECTION','SIMETRIC_DIFFERENCE', 'CROSS']:
+        while self.current_token is not None and self.current_token[0] in ['UNION','INTERSECTION','SIMETRIC_DIFFERENCE', 'CROSS', 'DOT']:
             convertion_table = {
                 'UNION': 'union',
                 'INTERSECTION': 'inter',
                 'SIMETRIC_DIFFERENCE': 'symDiff',
-                'CROSS': 'cross'
+                'CROSS': 'cross',
+                'DOT': 'dot'
             }
             
             op = convertion_table[self.current_token[0]]

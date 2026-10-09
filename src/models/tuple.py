@@ -44,10 +44,10 @@ class HezaTuple:
         return Indeterminate()
 
     def __repr__(self):
-        return f"({self.values})"
+        return f"({ ", ".join([item.print() for item in self.values]) })"
     
     def print(self, scope):
-        return self.to_text().value
+        return f"({ ", ".join([item.print(scope) for item in self.values]) })"
     
     def __eq__(self, other):
         if not isinstance(other, HezaTuple):

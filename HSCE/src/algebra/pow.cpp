@@ -209,4 +209,8 @@ namespace heza::algebra {
         return std::pow(base_->to_double(), exp_->to_double());
     }
 
+    void PowExpr::accept(const heza::core::VisitorPtr& visitor) const {
+        
+    }
+
 } // namespace heza::algebra

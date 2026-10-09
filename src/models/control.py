@@ -9,3 +9,6 @@ class Control:
 
     def __repr__(self):
         return f"Control({self.type, {self.value}})"
+
+    def __hash__(self) -> int:
+        return hash(self.type)

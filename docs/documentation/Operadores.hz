@@ -1,11 +1,11 @@
 ~ Aritmeticos Basicos
 
+- a     ~ Valor negativo
 a + b   ~ Suma
 a - b   ~ Resta
 a * b   ~ Multiplicacion
 a / b   ~ Division
 a ^ b   ~ Potencia
-
 
 ~ Logicos
 
@@ -32,7 +32,32 @@ A ⋂ B   ~ Los elementos que estan en A y B
 A ∪ B   ~ Los elementos que estan en A o B
 A - B   ~ Los elementos que estan en A y no en B
 A ∆ B   ~ Los elementos que estan en A o B pero no en ambos
+        ~ Se conoce como diferencia simetrica
 A ⨉ B   ~ Producto cartesiano entre A y B
+
+
+~ Calculo
+
+d(y)/dx                 ~ Derivada de y con respecto a x
+∫ a..b: f(x) dx         ~ Integral desde a hasta b
+                        ~ de f(x) con respecto a x
+∫ f(x) dx               ~ Integral indefinida de f(x)
+                        ~ Con respecto a x
+lim(f(x), x → b)        ~ Limite de f(x) cuando x 
+                        ~ Tiende a b
+∂(y)/dx                 ~ Derivada parcial de y
+                        ~ Con respecto a x
+∇ * a                   ~ Gradiente de a (siendo a un escalar)
+∇ ∙ a                   ~ Devergencia (Siendo a una tupla de 3 elementos)
+∇ ⨉ a                   ~ Rotacional (Siendo a una tupla de 3 elementos)
+
+~ Avanzados
+|abs|   ~ Valor ansolto en numeros
+        ~ Cardinalidad en Conjuntos
+        ~ Lenght en Strings
+!a      ~ Factorial de a
+√(a)    ~ Raiz de a
+@a      ~ Parte entera de a
 
 
 ~ Iteradores

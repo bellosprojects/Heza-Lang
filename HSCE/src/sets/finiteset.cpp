@@ -42,17 +42,17 @@ namespace heza::sets {
     };
 
     heza::core::ExprPtr FiniteSet::clone() const {
-        auto new_set = std::set<heza::core::ExprPtr>();
+        auto new_set = std::vector<heza::core::ExprPtr>();
         for(auto i : items_){
-            new_set.insert(i->clone());
+            new_set.push_back(i->clone());
         }
         return std::make_shared<FiniteSet>(new_set);
     };
 
     heza::core::ExprPtr FiniteSet::simplify() const {
-        auto simplified_set = std::set<heza::core::ExprPtr>();
+        auto simplified_set = std::vector<heza::core::ExprPtr>();
         for(auto i : items_){
-            simplified_set.insert(i->simplify());
+            simplified_set.push_back(i->simplify());
         }
         return std::make_shared<FiniteSet>(simplified_set);
     };
@@ -122,5 +122,31 @@ namespace heza::sets {
     heza::core::ExprPtr FiniteSet::choose() const {
         return nullptr;
     };
+
+    int FiniteSet::compare(const heza::core::Expr& other) const {
+        
+        return 1;
+
+    }
+
+    heza::core::TypeId FiniteSet::get_type_id() const {
+        return heza::core::TypeId::FINITESET;
+    }
+
+    heza::core::ExprPtr FiniteSet::subs(const heza::core::Substitution& subst) const {
+        
+        std::vector<heza::core::ExprPtr> sustituted;
+        
+        for(auto item : items_){
+            sustituted.push_back(item->subs(subst));
+        }
+
+        return std::make_shared<FiniteSet>(sustituted);
+    }
+
+    bool FiniteSet::is_atomic() const {
+        return false;
+    }
+
 
 };

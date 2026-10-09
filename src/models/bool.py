@@ -45,7 +45,7 @@ class Bool:
     
     def to_set(self):
         from models import HezaSet as Set
-        return Set([self])
+        return Set({self})
     
     def to_infinite(self):
         from models import Infinite
@@ -64,3 +64,6 @@ class Bool:
     
     def print(self, _):
         return self.__repr__()
+
+    def __hash__(self) -> int:
+        return hash(self.value)

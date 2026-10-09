@@ -14,3 +14,5 @@ src/hidden.py
 *.dll
 /HSCE/stubs/
 /.pytest_cache/
+/setup/build/
+/setup/dist/

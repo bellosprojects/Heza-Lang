@@ -60,6 +60,29 @@ class HezaSet:
             raise TypeError(f"No se puede restar con {type(other)}")
         return HezaSet(self.values - other.values)
 
+    def __pow__(self, other):
+        from .number import Number
+        if not isinstance(other, Number):
+            raise TypeError("Un objeto Set solo se puede elevar a un numero finito")
+
+        exp = int(other.value)
+
+        if exp < 0:
+            raise ValueError("El objeto Set solo se puede elevar a un numero entero mayor o igual a 0")
+
+        if exp == 0:
+            return HezaSet(set())
+
+        initial = HezaSet(self.values.copy()) 
+        result = initial
+
+        for _ in range(exp - 1):
+
+            result = result.cross(initial)
+            
+
+        return result
+
     def print(self, scope):
         if len(self.values) == 0:
             return "{}"
@@ -123,4 +146,4 @@ class HezaSet:
         return HezaSet(new_set)
     
     def __hash__(self):
-        return None
+        return hash(tuple(self.values))

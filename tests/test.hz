@@ -1,11 +1,58 @@
-A = {0.5, 0.76, 0.21, 0.66, 1.21, 4.01, 2.79, 0.95}
-B = {0.43, 0.76, 0.21, 0.66, 1.21, 4.01, 2.79, 0.5}
-C = {0.42, 0.76, 0.21, 0.66, 8, 4.01, 2.79, 0.95}
+R = (0.96, 0.96, 0.96, 0.90, 0.90, 0.94, 0.94)
 
-f(x, y, z) = (x + y) ^ 2 - y * z + 3
+conns = {
+    (0, 1), 
+    (0, 6), 
+    (1, 6), 
+    (1, 2), 
+    (1, 4), 
+    (6, 4), 
+    (6, 5), 
+    (6, 7), 
+    (4, 2), 
+    (4, 5), 
+    (4, 7), 
+    (2, 3), 
+    (2, 5), 
+    (5, 3), 
+    (5, 7), 
+    (3, 7), 
+    (3, 8), 
+    (7, 8)
+}
 
-Tuples = A ⨉ B ⨉ C
+reversedConns = {(x[1], x[0]) | x ∈ conns}
 
-Bases = {(a[0], a[1], a[2]) | a ∈ Tuples : f(a[0],a[1],a[2]) == 0}
+allConns = conns ∪ reversedConns
 
-Sys.out << Bases >> Text
+TARGET = 8
+
+prob = 0
+caminos = {}
+
+peso(path) = ∏(i ∈ [1..7], if i ∈ path R[i - 1] else (1 - R[i - 1]))
+
+fun rec(path, free, last) {
+    
+    if (last == TARGET ∧ ¬ (path ∈ caminos)) {
+        prob = prob + peso(path)
+        caminos ← path
+    }
+
+    disponibles = {x[1] | x ∈ allConns: x[0] == last ∧ x[1] ∈ (free - path)}
+
+    ∀ x ∈ disponibles do {
+        innerPath = path ∪ {x}
+        innerFree = free - {x}
+        rec(innerPath, innerFree, x)
+    }
+}
+
+fun init() {
+    rec({0}, [1..TARGET], 0)
+}
+
+init()
+rand(0, TARGET)
+
+Sys.out << prob

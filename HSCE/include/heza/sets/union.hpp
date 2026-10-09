@@ -37,6 +37,11 @@ namespace heza::sets {
             SetExprPtr cartesian_product(const SetExprPtr& other) const;
             heza::core::ExprPtr choose() const;
 
+            int compare(const heza::core::Expr& other) const;
+            heza::core::TypeId get_type_id() const;
+            heza::core::ExprPtr subs(const heza::core::Substitution& subst) const;
+            bool is_atomic() const;
+
     };
 
 };

@@ -79,4 +79,22 @@ namespace heza::sets {
         return nullptr;
     };
 
+    int SetIntersection::compare(const heza::core::Expr& other) const {
+        
+        return 1;
+
+    }
+
+    heza::core::TypeId SetIntersection::get_type_id() const {
+        return heza::core::TypeId::SETINTERSECTION;
+    }
+
+    heza::core::ExprPtr SetIntersection::subs(const heza::core::Substitution& subst) const {
+
+        return std::make_shared<SetIntersection>(expr_to_set(left_->subs(subst)), expr_to_set(right_->subs(subst)));
+    }
+
+    bool SetIntersection::is_atomic() const {
+        return false;
+    }
 };

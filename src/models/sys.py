@@ -28,10 +28,10 @@ class Sys:
         else:
             raise ValueError(f"Propiedad Sys desconocida: {property}")
 
-    def print(self, values : list):
+    def print(self, values : list, scope):
 
         for val in values:
-            print(val, end=self.print_separator)
+            print(val.print(scope), end=self.print_separator)
 
         if self.out_new_line:
             print()

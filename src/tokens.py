@@ -29,6 +29,7 @@ tokens = [
     ('SIMETRIC_DIFFERENCE', r'Δ'),
     ('NABLA', r'∇'),
     ('CROSS', r'⨉'),
+    ('DOT', r'∙'),
     
     #Patrones
     ('NUMBER', r'\d+(\.\d+)?([eE][+-]\d+)?'),

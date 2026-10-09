@@ -282,4 +282,8 @@ namespace heza::algebra {
         return s;
     }
 
+    void AddExpr::accept(const heza::core::VisitorPtr& visitor) const {
+        
+    }
+
 } // namespace heza::algebra

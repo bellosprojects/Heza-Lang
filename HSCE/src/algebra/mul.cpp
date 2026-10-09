@@ -308,4 +308,8 @@ namespace heza::algebra {
         return p;
     }
 
+    void MulExpr::accept(const heza::core::VisitorPtr& visitor) const {
+        
+    }
+
 } // namespace heza::algebra

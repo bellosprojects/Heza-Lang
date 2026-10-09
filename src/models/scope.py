@@ -18,8 +18,8 @@ class Scope:
         self.blocks = {}
         self.traces = {}
         self.objects = {}
-        self.parent = parent
-        self.mode = None
+        self.parent : Scope | None = parent
+        self.mode : str | None = None
 
     def __repr__(self):
         return str(self.vars)

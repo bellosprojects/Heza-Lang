@@ -5,7 +5,7 @@
 namespace heza::atomic {
 
     class VariableExpr;
-    using VariableExprPtr = std::shared_ptr<const VariableExpr>;   // ← const
+    using VariableExprPtr = std::shared_ptr<const VariableExpr>;
 
     class VariableExpr : public heza::core::ArithmeticExpr {
     private:
