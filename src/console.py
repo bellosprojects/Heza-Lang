@@ -24,120 +24,119 @@ from prompt_toolkit import print_formatted_text
 from prompt_toolkit.formatted_text import FormattedText
 from pygments.token import Text, Operator, Number, Keyword, Punctuation, Name, String, Literal, Comment
 
-class HezaConsoleLexer(RegexLexer):
-    name = 'Heza'
-    tokens = {
-        'root': [
-
-            #palabras
-
-            #Signos
-            (r'←', Operator),
-            (r'→', Operator),
-            (r'∈', Operator),
-            (r'∉', Operator),
-            (r'\\', Operator),
-            (r'∧', Operator),
-            (r'∨', Operator),
-            (r'¬', Operator),
-            (r'√', Operator),
-            (r'∅', Literal),
-            (r'∀', Operator),
-            (r'∃', Operator),
-            (r'⊂', Operator),
-            (r'≠', Operator),
-            (r'∑', Operator),
-            (r'∏', Operator),
-            (r'∞', Literal),
-            (r'∄', Literal),
-            (r'∂', Operator),
-            (r'∫', Operator),
-            (r'∪', Operator),
-            (r'⋂', Operator),
-            (r'Δ', Operator),
-            (r'∇', Operator),
-            (r'⨉', Operator),
-            (r'∙', Operator),
-            
-            #Patrones
-            (r'\d+(\.\d+)?([eE][+-]\d+)?', Number),
-            (r'"([^"]*)"', String),
-            (r"'([^']*)'", Literal),
-
-            #\t \n ESP
-            (r'\s', Text),
-
-            #Comentarios
-            (r'~(.*)', Comment),
-
-            #Operadores
-            (r'==', Operator),
-            (r'=', Operator),
-            (r'>=', Operator),
-            (r'<=', Operator),
-            (r'>>', Operator),
-            (r'<<', Operator),
-            #('Q', r'\?'),
-            #('DOUBLEEXC', r'!!'),
-            (r'!', Operator),
-            (r'<', Operator),
-            (r'>', Operator),
-            (r'\+', Operator),
-            (r'-', Operator),
-            (r'\*', Operator),
-            (r'/', Operator),
-            (r'%', Operator),
-            (r'\^', Operator),
-            (r'\.\.', Text),
-            (r'\.', Text),
-            (r',', Punctuation),
-            (r'@', Literal),
-            (r'&', Operator),
-            (r':', Operator),
-            (r'\(', Punctuation),
-            (r'\)', Punctuation),
-            (r'\[', Punctuation),
-            (r'\]', Punctuation), 
-            (r'\{', Punctuation),
-            (r'\}', Punctuation),
-            #('DOLLAR', r'\$'),
-            (r'\|', Operator),
-
-            (rf'\b({"|".join(KeywordsRegex + ["exit"])})\b', Keyword),
-
-            (r'\b(true|flase)\b', Literal),
-
-            (r'[a-zA-Z_]\w*', Name),
-        ],
-    }
-
-style = Style.from_dict({
-    'prompt': 'ansicyan bold',
-    'result': 'ansigreen',
-    'continuation': 'ansiyellow',
-    'error': 'ansired bold'
-})
-
-bindings = KeyBindings()
-
-@bindings.add('c-c')
-def _(event):
-    """Ctrl+C: cancela la linea actual"""
-    event.app.current_buffer.reset()
-
-@bindings.add('c-z')
-def _(event):
-    os.kill(0, signal.SIGTERM)
-
-session = PromptSession(
-    lexer=PygmentsLexer(HezaConsoleLexer),
-    history=FileHistory('heza_history.txt'),
-    key_bindings=bindings,
-    style=style
-)
 
 def modo_calculadora_de_expresiones():
+    class HezaConsoleLexer(RegexLexer):
+        name = 'Heza'
+        tokens = {
+            'root': [
 
+                #palabras
+
+                #Signos
+                (r'←', Operator),
+                (r'→', Operator),
+                (r'∈', Operator),
+                (r'∉', Operator),
+                (r'\\', Operator),
+                (r'∧', Operator),
+                (r'∨', Operator),
+                (r'¬', Operator),
+                (r'√', Operator),
+                (r'∅', Literal),
+                (r'∀', Operator),
+                (r'∃', Operator),
+                (r'⊂', Operator),
+                (r'≠', Operator),
+                (r'∑', Operator),
+                (r'∏', Operator),
+                (r'∞', Literal),
+                (r'∄', Literal),
+                (r'∂', Operator),
+                (r'∫', Operator),
+                (r'∪', Operator),
+                (r'⋂', Operator),
+                (r'Δ', Operator),
+                (r'∇', Operator),
+                (r'⨉', Operator),
+                (r'∙', Operator),
+                
+                #Patrones
+                (r'\d+(\.\d+)?([eE][+-]\d+)?', Number),
+                (r'"([^"]*)"', String),
+                (r"'([^']*)'", Literal),
+
+                #\t \n ESP
+                (r'\s', Text),
+
+                #Comentarios
+                (r'~(.*)', Comment),
+
+                #Operadores
+                (r'==', Operator),
+                (r'=', Operator),
+                (r'>=', Operator),
+                (r'<=', Operator),
+                (r'>>', Operator),
+                (r'<<', Operator),
+                #('Q', r'\?'),
+                #('DOUBLEEXC', r'!!'),
+                (r'!', Operator),
+                (r'<', Operator),
+                (r'>', Operator),
+                (r'\+', Operator),
+                (r'-', Operator),
+                (r'\*', Operator),
+                (r'/', Operator),
+                (r'%', Operator),
+                (r'\^', Operator),
+                (r'\.\.', Text),
+                (r'\.', Text),
+                (r',', Punctuation),
+                (r'@', Literal),
+                (r'&', Operator),
+                (r':', Operator),
+                (r'\(', Punctuation),
+                (r'\)', Punctuation),
+                (r'\[', Punctuation),
+                (r'\]', Punctuation), 
+                (r'\{', Punctuation),
+                (r'\}', Punctuation),
+                #('DOLLAR', r'\$'),
+                (r'\|', Operator),
+
+                (rf'\b({"|".join(KeywordsRegex + ["exit"])})\b', Keyword),
+
+                (r'\b(true|flase)\b', Literal),
+
+                (r'[a-zA-Z_]\w*', Name),
+            ],
+        }
+
+    style = Style.from_dict({
+        'prompt': 'ansicyan bold',
+        'result': 'ansigreen',
+        'continuation': 'ansiyellow',
+        'error': 'ansired bold'
+    })
+
+    bindings = KeyBindings()
+
+    @bindings.add('c-c')
+    def _(event):
+        """Ctrl+C: cancela la linea actual"""
+        event.app.current_buffer.reset()
+
+    @bindings.add('c-z')
+    def _(event):
+        os.kill(0, signal.SIGTERM)
+
+    session = PromptSession(
+        lexer=PygmentsLexer(HezaConsoleLexer),
+        history=FileHistory('heza_history.txt'),
+        key_bindings=bindings,
+        style=style
+    )
     os.system("CLS")
 
     # Declaramos un scope, solo porque el evaluador necesita un scope para evaluar, pero no se va a usar.
