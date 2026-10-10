@@ -41,7 +41,11 @@ namespace heza::algebra {
         if (factors_.empty()) return "1";
         std::string r = factors_[0]->to_str();
         for (size_t i = 1; i < factors_.size(); ++i) {
-            r += " * ";
+            bool prev_num = factors_[i-1]->is_numeric();
+            bool curr_num = factors_[i]->is_numeric();
+            if (prev_num && curr_num) {
+                r += " \\cdot ";
+            }
             r += factors_[i]->to_str();
         }
         return r;
@@ -51,14 +55,10 @@ namespace heza::algebra {
         if (factors_.empty()) return U"1";
         std::u32string r = factors_[0]->to_latex();
         for (size_t i = 1; i < factors_.size(); ++i) {
-            // Para factores no numéricos, usar \cdot en lugar de yuxtaposición
-            // evita ambigüedades como "23" (que significa veintitrés, no 2·3).
             bool prev_num = factors_[i-1]->is_numeric();
             bool curr_num = factors_[i]->is_numeric();
             if (prev_num && curr_num) {
-                r += U" \\cdot ";
-            } else {
-                r += U"\\,";  // espacio fino (yuxtaposición implícita)
+                r += U" ⋅ ";
             }
             r += factors_[i]->to_latex();
         }

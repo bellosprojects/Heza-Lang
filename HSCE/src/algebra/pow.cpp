@@ -19,7 +19,7 @@ namespace heza::algebra {
     using atomic::VariableExprPtr;
 
     std::string PowExpr::to_str() const {
-        return "(" + base_->to_str() + ")^(" + exp_->to_str() + ")";
+        return "{" + base_->to_str() + "}^{" + exp_->to_str() + "}";
     }
 
     std::u32string PowExpr::to_latex() const {

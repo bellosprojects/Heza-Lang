@@ -3,11 +3,11 @@
 namespace heza::sets {
 
     std::string SetIntersection::to_str() const {
-        return left_->to_str() + " U " + right_->to_str();
+        return left_->to_str() + " \\cap " + right_->to_str();
     };
 
     std::u32string SetIntersection::to_latex() const {
-        return left_->to_latex() + U" U " + right_->to_latex();
+        return left_->to_latex() + U" ∩ " + right_->to_latex();
     };
 
     bool SetIntersection::is_equal(const heza::core::ExprPtr& other) const {

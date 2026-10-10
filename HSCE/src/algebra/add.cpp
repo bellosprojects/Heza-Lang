@@ -159,8 +159,9 @@ namespace heza::algebra {
     ExprPtr AddExpr::simplify() const { return simplify_impl(); }
 
     ArithmeticExprPtr AddExpr::simplify_impl() const {
-        // 1. Simplificar cada término y aplanar de nuevo
+        
         std::vector<ArithmeticExprPtr> flat;
+        
         for (auto& t : terms_) {
             auto s = t->simplify_arith();
             if (auto sub = std::dynamic_pointer_cast<const AddExpr>(s)) {

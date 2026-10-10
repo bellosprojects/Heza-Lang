@@ -150,7 +150,8 @@ keyword = [
     'intersection',
     'simetric_difference',
     'nabla',
-    'cross'
+    'cross',
+    'in'
 ]
 
 #Constantes

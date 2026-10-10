@@ -11,12 +11,10 @@ namespace heza::sets {
     using FiniteSetPtr = std::shared_ptr<const FiniteSet>;
 
     class FiniteSet : public SetExpr {
-
-        private:
-            std::vector<heza::core::ExprPtr> items_;
-
+        
         public:
-            FiniteSet(const std::vector<heza::core::ExprPtr>& items): items_(items) {};
+            std::vector<heza::core::ExprPtr> items_;
+            explicit FiniteSet(const std::vector<heza::core::ExprPtr>& items): items_(items) {};
 
             std::string to_str() const;
             std::u32string to_latex() const;
@@ -43,6 +41,7 @@ namespace heza::sets {
             heza::core::TypeId get_type_id() const;
             heza::core::ExprPtr subs(const heza::core::Substitution& subst) const;
             bool is_atomic() const;
+
     };
 
 };

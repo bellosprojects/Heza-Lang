@@ -3,7 +3,7 @@
 namespace heza::sets {
 
     std::string SetUnion::to_str() const {
-        return left_->to_str() + " U " + right_->to_str();
+        return left_->to_str() + " \\cup " + right_->to_str();
     };
 
     std::u32string SetUnion::to_latex() const {

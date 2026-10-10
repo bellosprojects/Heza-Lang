@@ -58,6 +58,8 @@ namespace heza::core {
         virtual TypeId get_type_id() const = 0;
         virtual ExprPtr subs(const Substitution& subst) const = 0;
         virtual bool is_atomic() const = 0;
+        
+        int precedence() const { return 0; }
     };
 
 } // namespace heza::core

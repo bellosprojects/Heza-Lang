@@ -4,13 +4,13 @@
 namespace heza::core {
     
     std::string TupleExpr::to_str() const {
-        std::string result = "(";
+        std::string result = "\\(";
         for(auto i : items_) {
             result.append(i->to_str() + ", ");
         }
         result.pop_back();
         result.pop_back();
-        return result + ")";
+        return result + "\\)";
     };
 
     std::u32string TupleExpr::to_latex() const {

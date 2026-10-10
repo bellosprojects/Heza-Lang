@@ -25,11 +25,11 @@ PYBIND11_MODULE(HSCE, m) {
     // =========================== CLASE BASE ==============================================================================================================================
 
     py::class_<heza::core::Expr, std::shared_ptr<heza::core::Expr>>(m, "Expr", "Clase base abstracta para todas las expresiones.")
-        .def("__str__", &heza::core::Expr::to_str)
-        .def("__repr__", &heza::core::Expr::to_str)
+        .def("__str__", &heza::core::Expr::to_latex)
+        .def("__repr__", &heza::core::Expr::to_latex)
         .def("to_str", &heza::core::Expr::to_str,
             "Convierte la expresion a un formato imprimible")
-        .def("to_latex", &heza::core::Expr::to_latex,
+        .def("to_latex", &heza::core::Expr::to_str,
             "Convierte la expresion al formato latex para renderizado")
         .def("is_equal", &heza::core::Expr::is_equal, py::arg("other"),
             "Verifica si dos expresiones son iguales")
@@ -73,7 +73,7 @@ PYBIND11_MODULE(HSCE, m) {
 
     // ================================================== CONJUNTOS ===========================================================================================================================================
 
-    py::class_<heza::sets::SetExpr, heza::core::Expr, std::shared_ptr<heza::sets::SetExpr>>(m, "Set", "Clase base para los conjuntos")
+    py::class_<heza::sets::SetExpr, heza::core::Expr, std::shared_ptr<heza::sets::SetExpr>>(m, "SetExpr", "Clase base para los conjuntos")
         .def("contains", &heza::sets::SetExpr::contains, 
             "Verifica si el conjunto contiene al elemento")
         .def("is_subset", &heza::sets::SetExpr::is_subset, py::arg("other"),
@@ -119,13 +119,22 @@ PYBIND11_MODULE(HSCE, m) {
 
     // ==================================================================== TUPLAS =====================================================================================================================================
 
-    py::class_<heza::core::TupleExpr, heza::core::Expr, std::shared_ptr<heza::core::TupleExpr>>(m, "Tuple", "n-upla (conjunto de expresiones ordenadas)")
-        .def(py::init<std::vector<heza::core::ExprPtr>&>(), py::arg("values"), "Inicializa una n-upla")
+    py::class_<heza::core::TupleExpr, heza::core::Expr, std::shared_ptr<heza::core::TupleExpr>>(m, "TupleExpr", "n-upla (conjunto de expresiones ordenadas)")
+        .def(py::init<std::vector<heza::core::ExprPtr>&>(), py::arg("values"), "Inicializa una n-upla") 
         .def("extract", &heza::core::TupleExpr::extract, py::arg("index"), 
             "Extrae el elemento en la posicion index")
         .def("cardinality", &heza::core::TupleExpr::cardinality,
             "Devuelve el tamaño de la tupla");
-            
+
+    // =============================================================== ITERADORES ========================================================================================================================================= //
+    py::class_<heza::calculus::SummationExpr, heza::core::Expr, std::shared_ptr<heza::calculus::SummationExpr>>(m, "Summation", "Aplica una funcion a los elementos de un conjunto y los suma")
+        .def(py::init<const heza::sets::SetExprPtr&, const heza::core::ExprPtr&, std::string>(), py::arg("dominio"), py::arg("expresion"), py::arg("var_name"), "Inicializa una sumatoria como nodo");
+ 
+    // =============================================================== OPERADORES ========================================================================================================================================= //
+    py::class_<heza::algebra::AddExpr, heza::core::ArithmeticExpr, std::shared_ptr<heza::algebra::AddExpr>>(m, "AddExpr", "Nodo suma");
+    py::class_<heza::algebra::MulExpr, heza::core::ArithmeticExpr, std::shared_ptr<heza::algebra::MulExpr>>(m, "MulExpr", "Nodo multiplicacion");
+    py::class_<heza::algebra::PowExpr, heza::core::ArithmeticExpr, std::shared_ptr<heza::algebra::PowExpr>>(m, "PowExpr", "Nodo potencia");
+    
 }
 
     // // ==========================================

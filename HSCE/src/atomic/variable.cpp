@@ -17,7 +17,7 @@ namespace heza::atomic {
     }
 
     bool VariableExpr::is_equal(const heza::core::ExprPtr& other) const {
-        auto other_var = std::dynamic_pointer_cast<const VariableExpr>(other);  // ← const
+        auto other_var = std::dynamic_pointer_cast<const VariableExpr>(other);
         return other_var && name_ == other_var->name_;
     }
 
@@ -63,7 +63,7 @@ namespace heza::atomic {
         const heza::core::ArithmeticExprPtr& other) const
     {
         std::vector<heza::core::ArithmeticExprPtr> terms;
-        terms.push_back(shared_arith());   // ← sin const_pointer_cast
+        terms.push_back(shared_arith());  
         terms.push_back(other);
         return std::make_shared<heza::algebra::AddExpr>(std::move(terms));
     }
@@ -72,7 +72,7 @@ namespace heza::atomic {
         const heza::core::ArithmeticExprPtr& other) const
     {
         std::vector<heza::core::ArithmeticExprPtr> factors;
-        factors.push_back(shared_arith());   // ← sin const_pointer_cast
+        factors.push_back(shared_arith());
         factors.push_back(other);
         return std::make_shared<heza::algebra::MulExpr>(std::move(factors));
     }

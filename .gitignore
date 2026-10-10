@@ -16,3 +16,4 @@ src/hidden.py
 /.pytest_cache/
 /setup/build/
 /setup/dist/
+heza_history.txt

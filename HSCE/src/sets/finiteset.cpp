@@ -4,14 +4,14 @@
 namespace heza::sets {
 
     std::string FiniteSet::to_str() const {
-        std::string result = "{";
+        std::string result = "\\{";
         for(auto i : items_){
             result.append(i->to_str());
             result.append(", ");
         }
         result.pop_back();
         result.pop_back();
-        result.append("}");
+        result.append("\\}");
         return result;
     }
 
