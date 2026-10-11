@@ -53,7 +53,7 @@ class Scope:
             return True
 
         if not self.parent:
-            False
+            return False
 
         return self.parent.get_block(name)
 
@@ -100,6 +100,8 @@ class Scope:
             elif not exists:
                 self.vars[name] = value
                 return True
+
+        return False
 
     def modify_var(self, var_name, new_value):
 

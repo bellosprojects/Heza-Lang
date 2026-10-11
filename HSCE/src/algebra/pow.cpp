@@ -27,11 +27,11 @@ namespace heza::algebra {
         std::u32string e = exp_->to_latex();
         std::u32string r;
         r.reserve(b.size() + e.size() + 5);
-        r += U"{";
+        r += U"(";
         r += b;
-        r += U"}^{";
+        r += U")^(";
         r += e;
-        r += U"}";
+        r += U")";
         return r;
     }
 

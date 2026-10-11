@@ -183,7 +183,7 @@ def evaluate_node_from_scope(node: dict, scope : Scope, interpreter = None):
             idx = int(index.value)
             if idx < 0 or idx >= len(obj.values):
                 raise IndexError("Índice fuera de rango")
-            return obj.get(index)   # usa obj, no set
+            return obj.get(index)
         elif isinstance(obj, HezaTuple):
             index = evaluate_node_from_scope(node['index'], scope, interpreter)
             return obj.get(index)
@@ -191,16 +191,30 @@ def evaluate_node_from_scope(node: dict, scope : Scope, interpreter = None):
             raise TypeError("Se esperaba un Conjunto o una Tupla para acceder")
 
     elif type == 'foreach':
-        set = evaluate_node_from_scope(node['set'], scope, interpreter)
+        set_ = evaluate_node_from_scope(node['set'], scope, interpreter)
+        iter_vars = node['descompose']
+        pattern = iter_vars['type']
         
-        if not isinstance(set, HezaSet):
+        if not isinstance(set_, HezaSet):
             raise ValueError("Se esperaba un Conjunto para recorrer en foreach")
         
         final = True
-        for i in set.values:
+        for i in set_.values:
 
             scope = Scope(scope)
-            scope.add_var(node['var'], i)
+
+            if pattern == 'normal':
+                scope.add_var(iter_vars['vars'][0], i)
+            elif pattern == 'tuple':
+                if not isinstance(i, HezaTuple):
+                    raise TypeError("Solo se puede decomponer una tupla")
+
+                if len(i.values) != len(iter_vars['vars']):
+                    raise TypeError("Para descomponer el elemento debe tener la misma cantidad de variables que lo esperan")
+
+                for idx, var in enumerate(iter_vars['vars']):
+                    scope.add_var(var, i.values[idx])
+
             final = final and evaluate_node_from_scope(node['condition'], scope, interpreter).to_bool()
             scope = scope.parent
             if not final:
@@ -209,16 +223,30 @@ def evaluate_node_from_scope(node: dict, scope : Scope, interpreter = None):
         return Bool(final)
 
     elif type == 'exist':
-        set = evaluate_node_from_scope(node['set'], scope, interpreter)
+        set_ = evaluate_node_from_scope(node['set'], scope, interpreter)
+        iter_vars = node['descompose']
+        pattern = iter_vars['type']
         
-        if not isinstance(set, HezaSet):
+        if not isinstance(set_, HezaSet):
             raise ValueError("Se esperaba un Conjunto para recorrer en foreach")
         
         final = False
-        for i in set.values:
+        for i in set_.values:
 
             scope = Scope(scope)
-            scope.add_var(node['var'], i)
+
+            if pattern == 'normal':
+                scope.add_var(iter_vars['vars'][0], i)
+            elif pattern == 'tuple':
+                if not isinstance(i, HezaTuple):
+                    raise TypeError("Solo se puede decomponer una tupla")
+
+                if len(i.values) != len(iter_vars['vars']):
+                    raise TypeError("Para descomponer el elemento debe tener la misma cantidad de variables que lo esperan")
+
+                for idx, var in enumerate(iter_vars['vars']):
+                    scope.add_var(var, i.values[idx])
+
             final = final or evaluate_node_from_scope(node['condition'], scope, interpreter).to_bool()
             scope = scope.parent
             if final:
@@ -227,13 +255,27 @@ def evaluate_node_from_scope(node: dict, scope : Scope, interpreter = None):
         return Bool(final)
 
     elif type == 'summation':
-        set = evaluate_node_from_scope(node['set'], scope, interpreter).to_set()
+        set_ = evaluate_node_from_scope(node['set'], scope, interpreter).to_set()
+        iter_vars = node['descompose']
+        pattern = iter_vars['type']
 
         final = Null()
-        for i in set.values:
+        for i in set_.values:
 
             scope = Scope(scope)
-            scope.add_var(node['var'], i)
+
+            if pattern == 'normal':
+                scope.add_var(iter_vars['vars'][0], i)
+            elif pattern == 'tuple':
+                if not isinstance(i, (HezaTuple)):
+                    raise ValueError("Solo se puede descomponer una tupla")
+
+                if len(i.values) != len(iter_vars['vars']):
+                    raise ValueError("Para descomponer el elemento debe tener la misma cantidad de variables que lo esperan")
+
+                for idx, var in enumerate(iter_vars['vars']):
+                    scope.add_var(var, i.values[idx])
+                
 
             final += evaluate_node_from_scope(node['expresion'], scope, interpreter)
 
@@ -242,13 +284,25 @@ def evaluate_node_from_scope(node: dict, scope : Scope, interpreter = None):
         return final
 
     elif type == 'production':
-        set = evaluate_node_from_scope(node['set'], scope, interpreter).to_set()
+        set_ = evaluate_node_from_scope(node['set'], scope, interpreter).to_set()
+        iter_vars = node['descompose']
+        pattern = iter_vars['type']
 
         final = Number(1)
-        for i in set.values:
+        for i in set_.values:
 
-            scope = Scope(scope)
-            scope.add_var(node['var'], i)
+            scope : Scope | None = Scope(scope)
+            if pattern == 'normal':
+                scope.add_var(iter_vars['vars'][0], i)
+            elif pattern == 'tuple':
+                if not isinstance(i, (HezaTuple)):
+                    raise ValueError("Solo se puede descomponer una tupla")
+
+                if len(i.values) != len(iter_vars['vars']):
+                    raise ValueError("Para descomponer el elemento debe tener la misma cantidad de variables que lo esperan")
+
+                for idx, var in enumerate(iter_vars['vars']):
+                    scope.add_var(var, i.values[idx])
 
             final *= evaluate_node_from_scope(node['expresion'], scope, interpreter)
 
@@ -258,6 +312,8 @@ def evaluate_node_from_scope(node: dict, scope : Scope, interpreter = None):
 
     elif type == 'filter':
         set_ = evaluate_node_from_scope(node['set'], scope, interpreter).to_set()
+        iter_vars = node['descompose']
+        pattern = iter_vars['type']
 
         filtered_set = HezaSet({})
 
@@ -266,7 +322,17 @@ def evaluate_node_from_scope(node: dict, scope : Scope, interpreter = None):
         for i in set_.values:
 
             scope = Scope(scope)
-            scope.add_var(node['var'], i)
+
+            if pattern == 'normal':
+                scope.add_var(iter_vars['vars'][0], i)
+            elif pattern == 'tuple':
+                if not isinstance(i, HezaTuple):
+                    raise ValueError("Se se puede descomponer una tupla")
+                if len(i.values) != len(iter_vars['vars']):
+                    ValueError("Para descomponer el elemento debe tener la misma cantidad de variables que lo esperan")
+
+                for idx, var in enumerate(iter_vars['vars']):
+                    scope.add_var(var, i.values[idx])
 
             if evaluate_node_from_scope(node['condition'], scope, interpreter).to_bool():
                 filtered_set.add(i)
@@ -277,16 +343,26 @@ def evaluate_node_from_scope(node: dict, scope : Scope, interpreter = None):
     
     elif type == 'transformation':
     
-        sets = [evaluate_node_from_scope(set, scope, interpreter).to_set() for set in node['sets']]
+        set_ = evaluate_node_from_scope(node['set'], scope, interpreter).to_set()
+        iter_vars = node['descompose']
+        pattern = iter_vars['type']
 
         final_set = HezaSet({})
 
-        for i in range(int(sets[0].to_abs())):
+        for i in set_.values:
 
             scope = Scope(scope)
 
-            for var, set in zip(node['vars'], sets):
-                scope.add_var(var, set.get(Number(i)))
+            if pattern == 'normal':
+                scope.add_var(iter_vars['vars'][0], i)
+            elif pattern == 'tuple':
+                if not isinstance(i, HezaTuple):
+                    raise ValueError("Se se puede descomponer una tupla")
+                if len(i.values) != len(iter_vars['vars']):
+                    ValueError("Para descomponer el elemento debe tener la misma cantidad de variables que lo esperan")
+
+                for idx, var in enumerate(iter_vars['vars']):
+                    scope.add_var(var, i.values[idx])
 
             if evaluate_node_from_scope(node['condition'], scope, interpreter).to_bool():
                 final_set.add(evaluate_node_from_scope(node['expresion'], scope, interpreter))
@@ -503,7 +579,7 @@ def unary_operation(value, operation):
             raise ValueError("La operacion fact(!) solo soporta valores de tipo Number")
 
         from math import factorial
-        return Number(factorial(value.value))
+        return Number(factorial(int(value.value)))
 
     if operation == 'sqrt':
         if not isinstance(value, Number):

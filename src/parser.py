@@ -89,6 +89,44 @@ class Parser:
             else:
                 break
         return args
+
+    def parse_iter_vars(self) -> dict[str, str | list[str]]:
+
+        if not self.current_token:
+            self.error("Se esperaba un identificador")
+
+        if self.current_token[0] == 'ID':
+            var_name = self.current_token[1]
+            self.advance()
+            return {
+                'type': 'normal',
+                'vars': [var_name]
+            }
+
+        if self.current_token[0] != 'OPENP':
+            self.error("Se esperaba un identificador")
+        self.advance()
+
+        iter_vars = []
+
+        while self.current_token and self.current_token[0] == 'ID':
+            iter_vars.append(self.current_token[1])
+            self.advance()
+            if not self.current_token or self.current_token[0] != 'COMA':
+                break
+            self.advance()
+
+        if not self.current_token or self.current_token[0] != 'CLOSEP':
+            self.error("Se esperaba ) para cerrar el patrón de tupla")
+        self.advance()
+
+        if len(iter_vars) == 0:
+            self.error("Debe haber al menos una variable")
+
+        return {
+            'type': 'tuple',
+            'vars': iter_vars
+        }
     
     def parse_postfix(self, left):
         """
@@ -367,23 +405,6 @@ class Parser:
         else:
             return self.parse_value()
         
-    def parse_index_access(self, left):
-        """Parsea accesos por índice encadenados: expr[0][1]..."""
-        while self.current_token and self.current_token[0] == 'OPENC':
-            self.advance()  # consumir [
-            if not self.current_token or self.current_token[0] not in ExpresionValues:
-                self.error("Se esperaba un índice después de [")
-            index = self.parse_expresion()
-            if not self.current_token or self.current_token[0] != 'CLOSEC':
-                self.error("Se esperaba ] para cerrar el acceso por índice")
-            self.advance()  # consumir ]
-            left = {
-                'type': 'access',
-                'set': left,
-                'index': index
-            }
-        return left
-        
     def parse_value(self):
         if not self.current_token:
             self.error("Se esperaba un valor")
@@ -606,13 +627,10 @@ class Parser:
             self.error("Se esperaba ( despues de ∑")
         self.advance()
 
-        if not self.current_token or self.current_token[0] != 'ID':
-            self.error("Se esperaba un identificador despues de ∑(")
-        varName = self.current_token[1]
-        self.advance()
+        descompose = self.parse_iter_vars()
 
-        if not self.current_token or self.current_token[0] != "IN":
-            self.error(f"Se esperaba ∈ despues de ∑({varName}")
+        if not self.current_token or self.current_token[0] != 'IN':
+            self.error("Se esperaba ∈ despues de ∑(vars...")
         self.advance()
 
         if not self.current_token:
@@ -634,7 +652,7 @@ class Parser:
         return {
             "type": "summation",
             "set": set,
-            "var": varName,
+            "descompose": descompose,
             "expresion": expresion
         }
     
@@ -643,13 +661,10 @@ class Parser:
             self.error("Se esperaba ( despues de ∏")
         self.advance()
 
-        if not self.current_token or self.current_token[0] != 'ID':
-            self.error("Se esperaba un identificador despues de ∏(")
-        varName = self.current_token[1]
-        self.advance()
+        descompose = self.parse_iter_vars()
 
-        if not self.current_token or self.current_token[0] != "IN":
-            self.error(f"Se esperaba ∈ despues de ∏({varName}")
+        if not self.current_token or self.current_token[0] != 'IN':
+            self.error("Se esperaba ∈ despues de ∏(vars...")
         self.advance()
 
         if not self.current_token:
@@ -671,7 +686,7 @@ class Parser:
         return {
             "type": "production",
             "set": set,
-            "var": varName,
+            "descompose": descompose,
             "expresion": expresion
         }
     
@@ -697,30 +712,13 @@ class Parser:
             self.current_token = token_aux
             self.pos = pos_aux
             return self.parse_transformation()
-        
+        elif self.current_token[0] == 'DOUBLE':
+            self.current_token = token_aux
+            self.pos = pos_aux
+            return self.parse_filter()
+                
         self.current_token = token_aux
         self.pos = pos_aux
-
-        if self.pos < len(self.tokens) and self.tokens[self.pos][0] == 'ID':
-            if self.pos + 1 < len(self.tokens) and self.tokens[self.pos+1][0] == 'IN':
-                is_sub = False
-                num = self.pos+2
-                llaves = 0
-                while num < len(self.tokens):
-                    if self.tokens[num][0] == 'OPENL':
-                        llaves += 1
-                    if self.tokens[num][0] == 'CLOSEL':
-                        llaves -= 1
-                    if self.tokens[num][0] == 'COMA' and llaves == 0:
-                        break
-                    if self.tokens[num][0] == 'DOUBLE':
-                        is_sub = True
-                        break
-                    num += 1
-
-                if is_sub:
-                    return self.parse_filter()
-                
         values = []
 
         while self.current_token and self.current_token[0] in ExpresionValues:
@@ -751,30 +749,20 @@ class Parser:
             self.error("Se esperaba | despues de la expresion en transformation")
         self.advance()
 
-        t_vars = []
-        sets = []
         condition = {
             "type": "bool",
             "value": True
         }
 
-        while self.current_token and self.current_token[0] == 'ID':
-            var = self.current_token[1]
-            t_vars.append(var)
-            self.advance()
+        descompose = self.parse_iter_vars()
 
-            if not self.current_token or self.current_token[0] != 'IN':
-                self.error("Se esperaba ∈ espues de la variable en transformation")
-            self.advance()
+        if not self.current_token or self.current_token[0] != 'IN':
+            self.error("Se esperaba ∈ espues de vars... en transformation")
+        self.advance()
 
-            if not self.current_token or self.current_token[0] not in ExpresionValues:
-                self.error(f"Se esperaba un valor como el conjunto de la variable {var}")
-            set = self.parse_expresion()
-            sets.append(set)
-
-            if not self.current_token or self.current_token[0] != 'COMA':
-                break
-            self.advance()
+        if not self.current_token or self.current_token[0] not in ExpresionValues:
+            self.error("Se esperaba un valor como el conjunto depues de ∈")
+        set = self.parse_expresion()
 
         if self.current_token and self.current_token[0] == 'DOUBLE':
             self.advance()
@@ -787,26 +775,20 @@ class Parser:
             self.error("Se esperaba { para cerrar la transformacion")
         self.advance()
 
-        if len(t_vars) != len(sets):
-            self.error("La cantidad de conjuntos es distinta a la cantidad de variables en transformation")
-
         return {
             "type": "transformation",
-            "sets": sets,
-            "vars": t_vars,
+            "set": set,
+            "descompose": descompose,
             "expresion": expresion,
             "condition": condition
         }
 
     def parse_filter(self):
 
-        if not self.current_token or self.current_token[0] != 'ID':
-            self.error("Se esperaba un identificador en filter")
-        var = self.current_token[1]
-        self.advance()
+        descompose = self.parse_iter_vars()
 
         if not self.current_token or self.current_token[0] != 'IN':
-            self.error("Se esperaba ∈ despues de {"+var)
+            self.error("Se esperaba ∈ despues de {vars...")
         self.advance()
 
         if not self.current_token:
@@ -814,7 +796,7 @@ class Parser:
         set = self.parse_expresion()
 
         if not self.current_token or self.current_token[0] != 'DOUBLE':
-            self.error("Se esperaba el operador de referencia")
+            self.error("Se esperaba : despues del conjunto")
         self.advance()
 
         if not self.current_token:
@@ -828,7 +810,7 @@ class Parser:
         return {
             "type": "filter",
             "set": set,
-            "var": var,
+            "descompose": descompose,
             "condition": condition
         }
     
@@ -1082,17 +1064,14 @@ class Parser:
     
     def parse_foreach(self):
 
-        if not self.current_token or self.current_token[0] != 'ID':
-            self.error("Se esperaba una variable iteradora despues de ∀")
-        var = self.current_token[1]
-        self.advance()
+        descompose = self.parse_iter_vars()
 
         if not self.current_token or self.current_token[0] != 'IN':
-            self.current_token(f"Se esperaba ∈ depues de ∀ {var}")
+            self.error("Se esperaba ∈ depues de ∀vars...")
         self.advance()
 
         if not self.current_token or self.current_token[0] not in ExpresionValues:
-            self.error(f"Se esperaba un conjunto para recorres despues de ∀ {var} ∈")
+            self.error("Se esperaba un conjunto para recorres despues de ∀vars... ∈")
         set = self.parse_expresion()
 
         if not self.current_token or self.current_token[0] != 'DOUBLE':
@@ -1106,23 +1085,20 @@ class Parser:
         return {
             "type": "foreach",
             "set": set,
-            "var": var,
+            "descompose": descompose,
             "condition": condition
         }
 
     def parse_exist(self):
 
-        if not self.current_token or self.current_token[0] != 'ID':
-            self.error("Se esperaba una variable iteradora despues de ∃")
-        var = self.current_token[1]
-        self.advance()
+        descompose = self.parse_iter_vars()
 
         if not self.current_token or self.current_token[0] != 'IN':
-            self.current_token(f"Se esperaba ∈ depues de ∃ {var}")
+            self.error("Se esperaba ∈ depues de ∃vars...")
         self.advance()
 
         if not self.current_token or self.current_token[0] not in ExpresionValues:
-            self.error(f"Se esperaba un conjunto para recorres despues de ∃ {var} ∈")
+            self.error("Se esperaba un conjunto para recorres despues de ∃vars... ∈")
         set = self.parse_expresion()
 
         if not self.current_token or self.current_token[0] != 'DOUBLE':
@@ -1136,7 +1112,7 @@ class Parser:
         return {
             "type": "exist",
             "set": set,
-            "var": var,
+            "descompose": descompose,
             "condition": condition
         }
     

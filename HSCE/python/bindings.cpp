@@ -22,7 +22,7 @@ PYBIND11_MODULE(HSCE, m) {
         coincidencia de patrones (pattern matching) y reescritura de reglas.
     )pbdoc";
 
-    // =========================== CLASE BASE ==============================================================================================================================
+    // =========================== CLASE BASE ========================================================================================================================================= //
 
     py::class_<heza::core::Expr, std::shared_ptr<heza::core::Expr>>(m, "Expr", "Clase base abstracta para todas las expresiones.")
         .def("__str__", &heza::core::Expr::to_latex)
@@ -42,7 +42,7 @@ PYBIND11_MODULE(HSCE, m) {
         .def("is_atomic", &heza::core::Expr::is_atomic,
             "Indica si es un nodo hoja");
 
-    // ======================== ARITMETICAS ============================================================================================================================
+    // ======================== ARITMETICAS ========================================================================================================================================= //
             
     py::class_<heza::core::ArithmeticExpr, heza::core::Expr, std::shared_ptr<heza::core::ArithmeticExpr>>(m, "Arithmetics", "Clase base para las expresiones algebraicas y aritmeticas")
         .def("__add__", &heza::core::ArithmeticExpr::add, py::arg("other"))
@@ -71,7 +71,7 @@ PYBIND11_MODULE(HSCE, m) {
         .def(py::init<std::u32string>(), py::arg("name"), "Inicializa una variable");
 
 
-    // ================================================== CONJUNTOS ===========================================================================================================================================
+    // ================================================== CONJUNTOS =========================================================================================================================================== //
 
     py::class_<heza::sets::SetExpr, heza::core::Expr, std::shared_ptr<heza::sets::SetExpr>>(m, "SetExpr", "Clase base para los conjuntos")
         .def("contains", &heza::sets::SetExpr::contains, 
@@ -117,7 +117,7 @@ PYBIND11_MODULE(HSCE, m) {
     py::class_<heza::sets::SetDifference, heza::sets::SetExpr, std::shared_ptr<heza::sets::SetDifference>>(m, "SetDifference", "Diferencia de conjuntos")
         .def(py::init<const heza::sets::SetExprPtr&, const heza::sets::SetExprPtr&>(), py::arg("left"), py::arg("right"), "Inicializa una diferencia de conjuntos");
 
-    // ==================================================================== TUPLAS =====================================================================================================================================
+    // ==================================================================== TUPLAS ====================================================================================================================================== //
 
     py::class_<heza::core::TupleExpr, heza::core::Expr, std::shared_ptr<heza::core::TupleExpr>>(m, "TupleExpr", "n-upla (conjunto de expresiones ordenadas)")
         .def(py::init<std::vector<heza::core::ExprPtr>&>(), py::arg("values"), "Inicializa una n-upla") 

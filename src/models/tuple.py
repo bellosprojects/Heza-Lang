@@ -7,7 +7,7 @@ from .indeterminate import Indeterminate
 
 class HezaTuple:
     def __init__(self, values):
-        self.values = values
+        self.values : list = values
 
     def get(self, index):
         if not isinstance(index, Number):
@@ -32,7 +32,7 @@ class HezaTuple:
 
     def to_set(self):
         from .set import HezaSet
-        return HezaSet(self.values.copy())
+        return HezaSet(set(self.values.copy()))
 
     def to_infinite(self):
         return Infinite()

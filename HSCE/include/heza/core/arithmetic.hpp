@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include <heza/core/expr.hpp>
+#include <heza/atomic/variable.hpp>
 
 namespace heza::atomic {
     class VariableExpr;
