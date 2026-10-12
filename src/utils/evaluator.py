@@ -176,7 +176,7 @@ def evaluate_node_from_scope(node: dict, scope : Scope, interpreter = None):
 
     elif type == 'access':
         obj = evaluate_node_from_scope(node['set'], scope, interpreter)
-        if isinstance(obj, HezaSet):
+        if isinstance(obj, HezaTuple):
             index = evaluate_node_from_scope(node['index'], scope, interpreter)
             if not isinstance(index, Number):
                 raise ValueError("Índice debe ser un número")
@@ -315,7 +315,7 @@ def evaluate_node_from_scope(node: dict, scope : Scope, interpreter = None):
         iter_vars = node['descompose']
         pattern = iter_vars['type']
 
-        filtered_set = HezaSet({})
+        filtered_set = HezaSet(EMPYSET)
 
         scope = Scope(scope)
 
@@ -347,7 +347,7 @@ def evaluate_node_from_scope(node: dict, scope : Scope, interpreter = None):
         iter_vars = node['descompose']
         pattern = iter_vars['type']
 
-        final_set = HezaSet({})
+        final_set = HezaSet(EMPYSET)
 
         for i in set_.values:
 
@@ -404,7 +404,7 @@ def heza_range(limI, limS, step):
     if step.value < 0 and limI.value < limS.value:
         raise ValueError("step en range no puede ser menor a 0 si from_value < to_value")
 
-    final_range = HezaSet({})
+    final_range = HezaSet(EMPYSET)
 
     initial_value = limI.value
 

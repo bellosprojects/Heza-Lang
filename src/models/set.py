@@ -1,3 +1,5 @@
+EMPYSET = set()
+
 class HezaSet:
 
     def __init__(self, values: set):
@@ -9,20 +11,6 @@ class HezaSet:
             self.values.add(HezaSet(self.values))
         else:
             self.values.add(new_value)
-
-    def get(self, index):
-
-        from .number import Number
-
-        if not isinstance(index, Number):
-            raise TypeError("Se esperaba un numero como indice")
-
-        index = index.value
-
-        if index < 0 or index >= len(self.values):
-            raise IndexError("Indice fuera de los limites")
-
-        return list(self.values)[index]
 
     def union(self, other):
         if not isinstance(other, HezaSet):
@@ -47,11 +35,16 @@ class HezaSet:
         result = []
         for a in self.values:
             for b in other.values:
+                nuevos_elementos = []
                 if isinstance(a, HezaTuple):
-                    nuevos_elementos = a.values + [b]
-                    result.append(HezaTuple(nuevos_elementos))
+                    nuevos_elementos += a.values
                 else:
-                    result.append(HezaTuple([a, b]))
+                    nuevos_elementos += [a]
+                if isinstance(b, HezaTuple):
+                    nuevos_elementos += b.values
+                else:
+                    nuevos_elementos += [b]
+                result.append(HezaTuple(nuevos_elementos))
 
         return HezaSet(set(result))
         

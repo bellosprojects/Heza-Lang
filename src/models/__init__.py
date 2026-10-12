@@ -6,7 +6,7 @@ from .infinite import Infinite
 from .number import Number
 from .text import Text
 from .bool import Bool
-from .set import HezaSet
+from .set import HezaSet, EMPYSET
 from .function import Function, HezaFunction
 from .reference import Reference
 from .control import Control
