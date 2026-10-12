@@ -147,7 +147,7 @@ class Interpreter:
         return_value = None
         values = [evaluate_node_from_scope(val, self.scope, self) for val in command['values']]
         if len(values) > 1:
-            from src.models.tuple import HezaTuple
+            from models.tuple import HezaTuple
             return_value = HezaTuple(values)
         elif len(values) == 1:
             return_value = values[0]
@@ -196,7 +196,7 @@ class Interpreter:
 
     def selectiveUse(self, command):
         from lexer import Lexer
-        from src.parser import Parser
+        from parser import Parser
         import os
 
         module_name = command['module'] + '.hz'
@@ -212,7 +212,7 @@ class Interpreter:
     def use(self, command):
 
         from lexer import Lexer
-        from src.parser import Parser
+        from parser import Parser
         import os
 
         module_name = command['module'] + '.hz'
