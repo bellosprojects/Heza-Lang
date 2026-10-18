@@ -1,9 +1,1 @@
-allPaths = {0, 1} ^ 7
-
-esCamino(x1,x2,x3,x4,x5,x6,x7) = (x1 ∧ x4 ∧ (x7 ∨ (x5 ∧ x3))) ∨ (x1 ∧ x2 ∧ (x3 ∨ (x5 ∧ x7))) ∨ (x6 ∧ (x7 ∨ (x5 ∧ x3) ∨ (x4 ∧ x2 ∧ x3)))
-
-caminos = {(x1,x2,x3,x4,x5,x6,x7) ∈ allPaths : esCamino(x1, x2, x3, x4, x5, x6, x7)}
-
-R = (0.96, 0.96, 0.96, 0.90, 0.90, 0.94, 0.94)
-
-Sys.out << ∑(path ∈ caminos, ∏(i ∈ [0..6], if path[i] R[i] else 1 - R[i]))
+Sys.out << true ∧ false

@@ -1,29 +1,27 @@
 from models import *
+import engine.HSCE as cas
 
-def evaluate_node_from_scope(node: dict, scope : Scope, interpreter = None):
+def evaluate_node_from_scope(node: dict, scope : Scope, interpreter = None) -> cas.Expr:
 
     type = node['type']
 
-    if type == 'expresion':
-        return Expresion(node['value'])
+    # if type == 'expresion':
+    #     return Expresion(node['value'])
 
-    elif type == 'id':
+    if type == 'id':
         return scope.get_value(node['value'], interpreter)
-    
-    elif type == 'arroba':
-        return Number(int(evaluate_node_from_scope(node['value'], scope, interpreter).value))
 
     elif type == 'number':
-        return Number(node['value'])
+        return cas.Number(node['value'])
     
     elif type == 'text':
         return Text(node['value'])
 
     elif type == 'bool':
-        return Bool(node['value'])
+        return cas.BoolExpr(node['value'])
 
     elif type == 'null':
-        return Null()
+        return cas.NullExpr()
 
     elif type == 'infinite':
         return Infinite()
@@ -34,17 +32,16 @@ def evaluate_node_from_scope(node: dict, scope : Scope, interpreter = None):
     elif type == 'reference':
         return Reference(node['expresion'])
     
-    elif type == 'trace':
-        return scope.get_trace(node['value'])
-    
     elif type == 'tuple':
         values = [evaluate_node_from_scope(v, scope, interpreter) for v in node['values']]
         
-        return HezaTuple(values)
+        return cas.TupleExpr(values)
 
     elif type == 'set':
-        values = {evaluate_node_from_scope(value, scope, interpreter) for value in node['value']}
-        return HezaSet(values)
+        values = [evaluate_node_from_scope(value, scope, interpreter) for value in node['value']]
+
+        return cas.FiniteSet(values)
+    
     elif type == 'range':
         from_value = evaluate_node_from_scope(node['fromValue'], scope, interpreter)
         to_value = evaluate_node_from_scope(node['toValue'], scope, interpreter)
@@ -259,7 +256,7 @@ def evaluate_node_from_scope(node: dict, scope : Scope, interpreter = None):
         iter_vars = node['descompose']
         pattern = iter_vars['type']
 
-        final = Null()
+        final = cas.Number(0)
         for i in set_.values:
 
             scope = Scope(scope)
@@ -379,8 +376,18 @@ def evaluate_node_from_scope(node: dict, scope : Scope, interpreter = None):
 
         return lim
 
+    elif type == 'abstract':
+
+        definition = node.get('definition')
+
+        if definition == 'Set':
+            return cas.AbstractSet('A')
+
+        if definition == 'Scalar':
+            return cas.Variable('x')
+
     else:
-        return Null()
+        return cas.NullExpr()
 
 def heza_range(limI, limS, step):
     if not isinstance(limI, Number):
@@ -430,7 +437,8 @@ def eval(expresion, var, value):
         return expresion.evaluate(var, value)
     raise ValueError("La funcion eval solo aplica para objetos de tipo Expresion")
 
-def convertions(value, type):
+def convertions(value: cas.Expr, type: dict) -> cas.Expr:
+
     convertions_allowed = [
         'Number',
         'Text',
@@ -442,10 +450,10 @@ def convertions(value, type):
         'Bool'
     ]
 
-    if type['type'] != 'id':
+    if type.get('type') != 'id':
         raise ValueError("Se esperaba un identificador como tipo futuro")
     
-    tipo = type['value']
+    tipo = type.get('value')
 
     if tipo not in convertions_allowed:
         raise ValueError(f"El tipo '{tipo}' no es un tipo permitido para conversion")
@@ -469,12 +477,14 @@ def convertions(value, type):
         return value.to_indeterminate()
     
     elif tipo == 'Null':
-        return value.to_null()
+        return cas.NullExpr()
         
     elif tipo == 'Bool':
         return value.to_bool()
 
-def constantText(value):
+    raise RuntimeError("Conversion no soportada")
+
+def constantText(value: str):
     if value == 'ESP':
         return Text(" ")
 
@@ -483,93 +493,129 @@ def constantText(value):
 
     return Text("\t")
 
-def binary_operation(left, right, operation):
+def binary_operation(left: cas.Expr, right: cas.Expr, operation: str) -> cas.Expr:
 
-    if operation == 'add':
-        return left + right
-    
-    if operation == 'sub':
-        return left - right
+    # ====================================================== Aritmeticos ================================================================== #
 
-    if operation == 'div':
-        return left / right
-    
-    if operation == 'mod':
-        return left % right
+    if operation in ['add', 'sub', 'div', 'mod', 'mul', 'pow']:
 
-    if operation == 'mul':
-        return left * right
+        if not isinstance(left, cas.Arithmetics):
+            raise TypeError(f"El operando izquierdo debe ser del tipo Arithmetic para la operacion {operation}")
+        if not isinstance(right, cas.Arithmetics):
+            raise TypeError(f"El operando derecho debe ser del tipo Arithmetic para la operacion {operation}")
 
-    if operation == 'pow':
-        return left ** right
-    
-    if operation == 'equal':
-        return Bool(left == right)
-    
-    if operation == 'nEqual':
-        return Bool(left != right)
-    
-    if operation == 'greater':
-        return Bool(left > right)
-    
-    if operation == 'greaterEqual':
-        return Bool(left >= right)
-    
-    if operation == 'less':
-        return Bool(left < right)
-    
-    if operation == 'lessEqual':
-        return Bool(left <= right)
-    
-    if operation == 'in':
-        if not isinstance(right, HezaSet):
-            raise ValueError("La expresion right del operador in debe ser un conjunto")
-        return Bool(left in right.values)
+        if operation == 'add':
+            return left + right
+        elif operation == 'sub':
+            return left + (cas.Number(-1) * right)
+        elif operation == 'mul':
+            return left * right
+        elif operation == 'div':
+            return left * (right ** cas.Number(-1))
+        elif operation == 'mod':
+            raise NotImplemented
 
-    if operation == 'notin':
-        if not isinstance(right, HezaSet):
-            raise ValueError("La expresion right del operador not in debe ser un conjunto")
-        return Bool(not (left in right.values))
-    
-    if operation == 'del':
-        if not isinstance(left, HezaSet):
-            raise ValueError("La expresion left del operador del debe ser un conjunto")
-        return left.eliminar(right)
 
-    if operation == 'then':
+    # =============================================== Boolenos ============================================================== # 
 
-        return Bool((not left.to_bool()) or right.to_bool())
+    if operation in ['equal', 'nEqual', 'greater', 'greaterEqual', 'less', 'lessEqual', 'in', 'notin', 'then', 'and', 'or']:
 
-    if operation == 'and':
-        return Bool(left.to_bool() and right.to_bool())
 
-    if operation == 'or':
-        return Bool(left.to_bool() or right.to_bool())
-    
-    if operation == 'union':
-        if not isinstance(left, HezaSet):
-            raise TypeError("El operando izquierdo debe ser un conjunto para union")
-        return left.union(right)
-    
-    if operation == 'inter':
-        if not isinstance(left, HezaSet):
-            raise TypeError("El operando izquierdo debe ser un conjunto para interseccion")
-        return left.inter(right)
-    
-    if operation == 'symDiff':
-        if not isinstance(left, HezaSet):
-            raise TypeError("El operando izquierdo debe ser un conjunto para diferencia simetrica")
-        return left.symetric_difference(right)
-    
-    if operation == 'cross':
-        if not isinstance(left, HezaSet):
-            raise TypeError("El operando izquierdo debe ser un conjunto para producto cartesiano")
-        return left.cross(right)
+        if operation == 'equal':
+            return  Bool(left == right)
+        
+        if operation == 'nEqual':
+            return Bool(left != right)
+        
+        if operation == 'greater':
+            return Bool(left > right)
+        
+        if operation == 'greaterEqual':
+            return Bool(left >= right)
+        
+        if operation == 'less':
+            return Bool(left < right)
+        
+        if operation == 'lessEqual':
+            return Bool(left <= right)
+        
+        if operation == 'in':
+            if not isinstance(right, cas.SetExpr):
+                raise ValueError("La expresion right del operador in debe ser un conjunto")
+            return cas.BoolExpr(right.contains(left))
 
-def unary_operation(value, operation):
+        if operation == 'notin':
+            if not isinstance(right, cas.SetExpr):
+                raise ValueError("La expresion right del operador in debe ser un conjunto")
+            return cas.BoolExpr(right.contains(left)).nott()
+        
+        if operation == 'del':
+            if not isinstance(left, HezaSet):
+                raise ValueError("La expresion left del operador del debe ser un conjunto")
+            return left.eliminar(right)
+
+        if not isinstance(left, cas.LogicExpr):
+            raise TypeError("El operando izquierdo debe ser Logico")
+        if not isinstance(right, cas.LogicExpr):
+            raise TypeError("El operando derecho debe ser Logico")
+        
+        if operation == 'then':
+            return left.nott().orr(right)
+
+        if operation == 'and':
+            return left.andd(right)
+
+        if operation == 'or':
+            return left.orr(right)
+
+
+    # ========================================== CONJUNTOS ========================================================= #
+    
+    if operation in ['union', 'inter', 'symDiff', 'cross', 'sub']:
+
+        CONVERSION_MAP = {
+            'union': 'Union',
+            'inter': 'Intersection',
+            'symDiff': 'Symetric Difference',
+            'cross': 'Cartesian Product',
+            'sub': 'Substraction'
+        }
+
+        if not isinstance(left, cas.SetExpr):
+            raise TypeError(f"El operando izquierdo debe ser un conjunto para la operacion {CONVERSION_MAP[operation]}")
+        if not isinstance(right, cas.SetExpr):
+            raise TypeError(f"El operando derecho debe ser un conjunto para la operacion {CONVERSION_MAP[operation]}")
+
+        if operation == 'union':
+            return left.union(right)
+        elif operation == 'inter':
+            return left.intersection(right)
+        elif operation == 'symDiff':
+            return left.symetric_difference(right)
+        elif operation == 'cross':
+            return left.cartesian_product(right)
+        elif operation == 'sub':
+            return left.difference(right)
+
+    # =========================================== TUPLAS (VECTORES) =========================================================== #
+
+    if operation in ['dot', 'mul' 'cross']:
+
+        if isinstance(left, cas.TupleExpr):
+            pass
+
+        raise NotImplemented
+
+    raise RuntimeError("Operacion binaria desconocida")
+
+def unary_operation(value: cas.Expr, operation) -> cas.Expr:
 
     if operation == 'neg':
-        return -value
+
+        if isinstance(value, cas.Arithmetics):
+            return -value
+        else:
+            raise TypeError("La operacion -() solo se puede aplicar a operaciones de tipo Arithmetics")
 
     if operation == 'pos':
         return value
@@ -579,14 +625,21 @@ def unary_operation(value, operation):
             raise ValueError("La operacion fact(!) solo soporta valores de tipo Number")
 
         from math import factorial
-        return Number(factorial(int(value.value)))
+        return cas.Number(factorial(int(value.value)))
 
     if operation == 'sqrt':
-        if not isinstance(value, Number):
+        if not isinstance(value, cas.Number):
             raise ValueError("La operacion sqrt(√) solo soporta valores de tipo Number")
 
         from math import sqrt
-        return Number(sqrt(value.value))
+        return cas.Number(sqrt(value.to_double()))
 
     if operation == 'not':
-        return Bool(not value.to_bool())
+
+        if isinstance(value, cas.LogicExpr):
+            return value.nott()
+
+        else:
+            raise TypeError("La operacion not solo se puede aplicar a expresiones logicas")
+
+    raise RuntimeError("Operacion unaria desconocida")

@@ -23,3 +23,4 @@ def test_vars_simplified():
 
 if __name__ == "__main__":
     test_aritmethics()
+    test_vars_simplified()

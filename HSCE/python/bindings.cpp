@@ -42,6 +42,11 @@ PYBIND11_MODULE(HSCE, m) {
         .def("is_atomic", &heza::core::Expr::is_atomic,
             "Indica si es un nodo hoja");
 
+    // =============================== NULL ===================================================================================== //
+
+    py::class_<heza::core::NullExpr, heza::core::Expr, std::shared_ptr<heza::core::NullExpr>>(m, "NullExpr", "Valor nulo (Sin valor)")
+        .def(py::init<>(), "Inicializa un objeto Null");
+
     // ======================== ARITMETICAS ========================================================================================================================================= //
             
     py::class_<heza::core::ArithmeticExpr, heza::core::Expr, std::shared_ptr<heza::core::ArithmeticExpr>>(m, "Arithmetics", "Clase base para las expresiones algebraicas y aritmeticas")
@@ -105,6 +110,9 @@ PYBIND11_MODULE(HSCE, m) {
         .def("choose", &heza::sets::SetExpr::choose, 
             "Elije un elemento aleatorio");
 
+    py::class_<heza::sets::AbstractSetExpr, heza::sets::SetExpr, std::shared_ptr<heza::sets::AbstractSetExpr>>(m, "AbstractSet", "Conjunto abstracto, util para realizar modelos y simplificaciones")
+        .def(py::init<std::string>(), py::arg("name"), "Inicializa el conjunto abstracto");
+
     py::class_<heza::sets::FiniteSet, heza::sets::SetExpr, std::shared_ptr<heza::sets::FiniteSet>>(m, "FiniteSet", "Conjunto con una cantidad finita de elementos")
         .def(py::init<std::vector<heza::core::ExprPtr>&>(), py::arg("values"), "Inicializa un conjunto");
 
@@ -134,6 +142,17 @@ PYBIND11_MODULE(HSCE, m) {
     py::class_<heza::algebra::AddExpr, heza::core::ArithmeticExpr, std::shared_ptr<heza::algebra::AddExpr>>(m, "AddExpr", "Nodo suma");
     py::class_<heza::algebra::MulExpr, heza::core::ArithmeticExpr, std::shared_ptr<heza::algebra::MulExpr>>(m, "MulExpr", "Nodo multiplicacion");
     py::class_<heza::algebra::PowExpr, heza::core::ArithmeticExpr, std::shared_ptr<heza::algebra::PowExpr>>(m, "PowExpr", "Nodo potencia");
+
+    // ============================================================== LOGICA (Bools) =========================================================================================================== //
+
+    py::class_<heza::logic::LogicExpr, heza::core::Expr, std::shared_ptr<heza::logic::LogicExpr>>(m, "LogicExpr", "Expresion Logica")
+        .def("andd", &heza::logic::LogicExpr::and_, py::arg("other"))
+        .def("orr", &heza::logic::LogicExpr::or_, py::arg("other"))
+        .def("nott", &heza::logic::LogicExpr::not_);
+
+    py::class_<heza::logic::BoolExpr,heza::logic::LogicExpr, std::shared_ptr<heza::logic::BoolExpr>>(m, "BoolExpr", "Valor Booleano Base `(true | false)`")
+        .def(py::init<bool>(), py::arg("value"), "Inicializa un valor booleano base");
+
     
 }
 

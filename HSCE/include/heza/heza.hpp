@@ -5,3 +5,4 @@
 #include <heza/sets/sets.hpp>
 #include <heza/algebra/algebra.hpp>
 #include <heza/calculus/calculus.hpp>
+#include <heza/logic/logicbase.hpp>

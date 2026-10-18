@@ -2,8 +2,6 @@
 
 #include <memory>
 #include <heza/core/core.hpp>
-#include <string>
-#include <functional> 
 
 namespace heza::sets {
 

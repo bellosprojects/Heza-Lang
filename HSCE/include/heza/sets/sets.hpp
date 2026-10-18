@@ -5,3 +5,4 @@
 #include <heza/sets/union.hpp>
 #include <heza/sets/intersection.hpp>
 #include <heza/sets/difference.hpp>
+#include <heza/sets/abstractset.hpp>

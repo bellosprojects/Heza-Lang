@@ -462,19 +462,13 @@ class Parser:
             node = {"type": "indeterminate"}
             return self.parse_postfix(node)
 
-        elif self.current_token[0] == 'TRACE':
-            self.advance()
-            return self.parse_trace()  # trace ya es un valor completo
-
         elif self.current_token[0] == 'ARROBA':
             self.advance()
-            expr = self.parse_expresion()
-            node = {"type": "arroba", "value": expr}
-            return self.parse_postfix(node)
+            return self.parse_arroba()
 
         elif self.current_token[0] == 'OPENC':
             self.advance()
-            return self.parse_range()  # range ya es un valor completo
+            return self.parse_range()
 
         elif self.current_token[0] == 'SUMMATION':
             self.advance()
@@ -566,17 +560,57 @@ class Parser:
         else:
             self.error(f"Se esperaba un valor y se recibió: {self.current_token[1]}")
 
-    def parse_trace(self):
-        if not self.current_token or self.current_token[0] != "DOUBLE":
-            self.error("Se esperaba el operador de referencia despues de trace")
+    def parse_arroba(self):
+
+        if not self.current_token or self.current_token[0] != 'ID':
+            self.error("Se esperaba un identificador despues de @")
+
+        name = self.current_token[1]
         self.advance()
-        if not self.current_token or self.current_token[0] != "ID":
-            self.error("Se esperaba un identificador despues de trace:")
-        var_name = self.current_token[1]
+
+        AVAILABLES_ABSTRACTS_DEFINITIONS = [
+            'Set',
+            'Scalar',
+            'Bool',
+            'Tuple'
+        ]
+
+        if name not in AVAILABLES_ABSTRACTS_DEFINITIONS:
+            self.error(f"Definicion abstracta invalida: '{name}'")
+
+        if name != 'Tuple':
+
+            return {
+                'type': 'abstract',
+                'definition': name,
+                'params': []
+            }
+
+        if not self.current_token or self.current_token[0] != 'OPENP':
+            self.error("Se esperaba ( para inicializar la tupla abstracta")
         self.advance()
+
+        names = []
+
+        while self.current_token and self.current_token[0] == 'ID':
+
+            name = self.current_token[1]
+            self.advance()
+
+            names.append(name)
+
+            if not self.current_token or self.current_token[0] != 'COMA':
+                break
+            self.advance()
+
+        if not self.current_token or self.current_token[0] != 'CLOSEP':
+            self.error("Se esparaba ) para cerrar la tupla abstracta")
+        self.advance()
+
         return {
-            "type": "trace",
-            "value": var_name
+            'type': 'abstract',
+            'definition': name,
+            'params': names
         }
     
     def parse_range(self):
@@ -694,7 +728,7 @@ class Parser:
         if not self.current_token:
             self.error("Se esperaba un valor despues de {")
 
-        if self.current_token[0] == 'CLOSEL':
+        if self.current_token and self.current_token[0] == 'CLOSEL':
             self.advance()
             return {
                 "type": "set",
@@ -708,11 +742,11 @@ class Parser:
         if not self.current_token:
             self.error("Se esperaba } para cerrar el conjunto")
 
-        if self.current_token[0] == 'BARRA':
+        if self.current_token and self.current_token[0] == 'BARRA':
             self.current_token = token_aux
             self.pos = pos_aux
             return self.parse_transformation()
-        elif self.current_token[0] == 'DOUBLE':
+        elif self.current_token and self.current_token[0] == 'DOUBLE':
             self.current_token = token_aux
             self.pos = pos_aux
             return self.parse_filter()
@@ -1114,47 +1148,6 @@ class Parser:
             "set": set,
             "descompose": descompose,
             "condition": condition
-        }
-    
-    def parse_data_declaration(self):
-        
-        trace = False
-
-        if self.current_token and self.current_token[0] == 'TRACE':
-            trace = True
-            self.advance()
-
-        d_vars = []
-        values = []
-
-        while self.current_token and self.current_token[0] == 'ID':
-
-            var = self.current_token[1]
-            self.advance()
-
-            d_vars.append(var)
-
-            value = {
-                "type": "null"
-            }
-
-            if self.current_token and self.current_token[0] == 'ASIGNACION':
-                self.advance()
-                if not self.current_token or self.current_token[0] not in ExpresionValues:
-                    self.error(f"Se esperaba un valor despues de ← para la variable {var}")
-                value = self.parse_expresion()
-
-            values.append(value)
-
-            if not self.current_token or self.current_token[0] != 'COMA':
-                break
-            self.advance()
-
-        return {
-            "type": "dataDeclaration",
-            "trace": trace,
-            "vars": d_vars,
-            "values": values
         }
     
     def parse_fun(self):

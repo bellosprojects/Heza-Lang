@@ -44,7 +44,7 @@ class HezaTuple:
         return Indeterminate()
 
     def __repr__(self):
-        return f"({ ", ".join([item.print() for item in self.values]) })"
+        return f"({ ", ".join([str(item) for item in self.values]) })"
     
     def print(self, scope):
         return f"({ ", ".join([item.print(scope) for item in self.values]) })"

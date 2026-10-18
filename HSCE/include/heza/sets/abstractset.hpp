@@ -1,0 +1,46 @@
+#pragma once
+
+#include <heza/sets/set.hpp>
+
+namespace heza::sets {
+
+    class AbstractSetExpr;
+    using AbstractSetExprPtr = std::shared_ptr<const AbstractSetExpr>;
+
+    class AbstractSetExpr : public heza::sets::SetExpr {
+
+        public:
+
+            std::string name_;
+
+            explicit AbstractSetExpr(std::string name) : name_(std::move(name)) {}
+
+            std::string to_str() const;
+            std::u32string to_latex() const;
+            bool is_equal(const heza::core::ExprPtr& other) const;
+            heza::core::ExprPtr clone() const;
+            heza::core::ExprPtr simplify() const;
+            void accept(const heza::core::VisitorPtr& visitor) const;
+            size_t hash() const;
+
+            bool contains(heza::core::ExprPtr value) const;
+            bool is_subset(const SetExprPtr& other) const;
+            bool is_superset(const SetExprPtr& other) const;
+            bool is_empty() const;
+            bool is_infinite() const;
+            bool is_disjoint(const SetExprPtr& other) const;
+            heza::core::ArithmeticExprPtr cardinality() const;
+            SetExprPtr complement(const SetExprPtr& universal) const;
+            SetExprPtr power_set() const;
+            SetExprPtr symetric_difference(const SetExprPtr& other) const;
+            SetExprPtr cartesian_product(const SetExprPtr& other) const;
+            heza::core::ExprPtr choose() const;
+
+            int compare(const heza::core::Expr& other) const;
+            heza::core::TypeId get_type_id() const;
+            heza::core::ExprPtr subs(const heza::core::Substitution& subst) const;
+            bool is_atomic() const;
+
+    };
+
+};

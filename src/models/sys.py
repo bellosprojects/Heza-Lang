@@ -1,3 +1,6 @@
+import engine.HSCE as cas
+from .scope import Scope
+
 class Sys:
 
     """
@@ -14,7 +17,7 @@ class Sys:
         self.out_new_line = True
         self.sci_threshold = 1e6 
 
-    def set(self, property, value):
+    def set(self, property: str, value: bool | str | int | float):
         if property == "print_separator":
             self.print_separator = str(value)
         elif property == "in_prompt":
@@ -28,10 +31,10 @@ class Sys:
         else:
             raise ValueError(f"Propiedad Sys desconocida: {property}")
 
-    def print(self, values : list, scope):
+    def print(self, values: list[cas.Expr], scope: Scope):
 
         for val in values:
-            print(val.print(scope), end=self.print_separator)
+            print(val.to_latex(), end=self.print_separator)
 
         if self.out_new_line:
             print()

@@ -151,7 +151,6 @@ keyword = [
     'simetric_difference',
     'nabla',
     'cross',
-    'in'
 ]
 
 #Constantes

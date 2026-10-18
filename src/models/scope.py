@@ -1,4 +1,7 @@
 from .block import Block
+from .function import Function
+
+import engine.HSCE as cas
 
 class Scope:
 
@@ -13,9 +16,9 @@ class Scope:
     """
 
     def __init__(self, parent = None):
-        self.vars = {}
-        self.functions = {}
-        self.blocks = {}
+        self.vars : dict[str, cas.Expr] = {}
+        self.functions : dict[str, Function] = {}
+        self.blocks : dict[str, Block] = {}
         self.traces = {}
         self.objects = {}
         self.parent : Scope | None = parent
@@ -58,7 +61,6 @@ class Scope:
         return self.parent.get_block(name)
 
     def add_function(self, name, args, expresion):
-        from .function import Function
         self.functions[name] = Function(args, expresion)
 
     def is_function_here(self, name): 
@@ -131,7 +133,7 @@ class Scope:
         
         return self.parent.get_trace(var_name)
 
-    def get_value(self, var_name, interpreter, son = None):
+    def get_value(self, var_name, interpreter, son = None) -> cas.Expr:
 
         """
         Metodo para obtener el valor de un identificador
