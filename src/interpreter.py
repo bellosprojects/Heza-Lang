@@ -1,22 +1,28 @@
 import models as models
-from utils import *
-import math
-from utils.evaluator import evaluate_node_from_scope
-import sys
+import engine.HSCE as cas
 
-class InterpreterError(Exception):
-    pass
+from utils.evaluator import evaluate_node_from_scope
+
+import sys, math
 
 class Interpreter:
 
     def __init__(self, ast):
         self.ast = ast
-        self.scope = models.Scope(None)
+        self.scope : models.Scope = models.Scope(None)
+        self.initial_scope : models.Scope = self.scope
         self.sep = ""
         self.extra = 0
         self.sys = models.Sys()
         self.create_init_vars()
         sys.setrecursionlimit(100000)
+
+    def _back_scope(self):
+
+        if self.scope.parent:
+            self.scope = self.scope.parent
+        else:
+            self.scope = self.initial_scope
 
     def run(self):
 
@@ -76,22 +82,20 @@ class Interpreter:
         self.scope.add_var("pi", models.Number(math.pi))
         self.scope.add_var("LINE", models.Text("\n"))
 
-    def process(self, command):
+    def process(self, command) -> cas.Expr | None | models.Control:
         type = command['type']
 
         if type == 'asignacion':
             self.asignacion(command)
         elif type == "sys.out":
             self.print(command)
-        elif type == 'reassignment':
-            self.reassignment(command)
         elif type == 'sys.in':
             self.input(command)
         elif type == 'sys.set':
             prop = evaluate_node_from_scope(command['property'], self.scope, self)
             value = evaluate_node_from_scope(command['value'], self.scope, self)
             if isinstance(prop, models.Text):
-                self.sys.set(prop.value, value)
+                self.sys.set(prop.value, str(value)) # ============ CORREGIR ===================================
             else:
                 raise ValueError("La propiedad de Sys.set debe ser un texto")
         elif type == 'conditional':
@@ -294,26 +298,35 @@ class Interpreter:
 
     def _assign_lvalue(self, lvalue_node, value, scope : models.Scope):
         """Asigna un valor a un lvalue (id, attribute_access, access)"""
+
         if lvalue_node['type'] == 'id':
             var_name = lvalue_node['value']
-            # Si la variable existe, la modifica; si no, la crea
             scope.add_var(var_name, value)
+
         elif lvalue_node['type'] == 'attribute_access':
             obj = evaluate_node_from_scope(lvalue_node['object'], scope, self)
+
             if not isinstance(obj, models.HezaObject):
                 raise TypeError("El lado izquierdo no es un objeto")
+            
             obj.set(lvalue_node['attribute'], value)
-        elif lvalue_node['type'] == 'access':
-            obj = evaluate_node_from_scope(lvalue_node['set'], scope, self)
-            if not isinstance(obj, models.HezaSet):
-                raise TypeError("Solo se puede asignar a un índice de un conjunto (no a una tupla)")
-            index = evaluate_node_from_scope(lvalue_node['index'], scope, self)
-            if not isinstance(index, models.Number):
-                raise TypeError("El índice debe ser un número")
-            idx = int(index.value)
-            if idx < 0 or idx >= len(obj.values):
-                raise IndexError("Índice fuera de rango")
-            obj.values[idx] = value
+
+        # elif lvalue_node['type'] == 'access':
+        #     obj = evaluate_node_from_scope(lvalue_node['set'], scope, self)
+
+        #     if not isinstance(obj, cas.TupleExpr):
+        #         raise TypeError("Solo se puede asignar a un índice de un conjunto (no a una tupla)")
+            
+        #     index = evaluate_node_from_scope(lvalue_node['index'], scope, self)
+
+        #     if not isinstance(index, cas.Number):
+        #         raise TypeError("El índice debe ser un número")
+            
+        #     idx = int(index.to_double())
+        #     if idx < 0 or idx >= int(obj.cardinality().to_double()):
+        #         raise IndexError("Índice fuera de rango")
+            
+        #     obj.values[idx] = value
         else:
             raise TypeError(f"Tipo de lvalue no soportado: {lvalue_node['type']}")
 
@@ -335,13 +348,13 @@ class Interpreter:
 
         for branch in branches:
             condition = evaluate_node_from_scope(branch['condition'], self.scope, self)
-            if condition.to_bool():
+            if condition:
                 self.scope = models.Scope(self.scope)
                 for inst in branch['body']:
                     value = self.process(inst)
                     if value is not None:
                         return value
-                self.scope = self.scope.parent
+                self._back_scope()
                 return  # Salir después de ejecutar el bloque
 
         # Si ninguna condición se cumple y hay else
@@ -351,13 +364,13 @@ class Interpreter:
                 value = self.process(inst)
                 if value is not None:
                     return value
-            self.scope = self.scope.parent
+            self._back_scope()
 
-    def while_(self, command):
+    def while_(self, command) -> cas.Expr | None | models.Control:
 
         body = command['body']
 
-        while evaluate_node_from_scope(command['condition'], self.scope, self).to_bool():
+        while evaluate_node_from_scope(command['condition'], self.scope, self):
 
             self.scope = models.Scope(self.scope)
 
@@ -368,12 +381,12 @@ class Interpreter:
                         if result.type == 'return':
                             return result
                         elif result.type == 'stop':
-                            self.scope = self.scope.parent
+                            self._back_scope()
                             return None
                     else:
                         return result
                 
-            self.scope = self.scope.parent
+            self._back_scope()
 
     def for_(self, command):
 
@@ -383,25 +396,21 @@ class Interpreter:
         body = command['body']
 
         if pattern_type == 'tuple':
-            # Solo se espera un conjunto
             if len(sets) != 1:
                 raise ValueError("El patrón de tupla requiere exactamente un conjunto")
             set_obj = sets[0]
-            if not isinstance(set_obj, models.HezaSet):
+            if not isinstance(set_obj, cas.FiniteSet):
                 raise ValueError("Se esperaba un conjunto para iterar en ∀ con patrón de tupla")
 
-            # Iterar sobre cada elemento del conjunto
-            for element in set_obj.values:
-                # Verificar que sea una tupla
-                if not isinstance(element, models.HezaTuple):
+            for element in set_obj.__iter__():
+                if not isinstance(element, cas.TupleExpr):
                     raise ValueError(f"Cada elemento del conjunto debe ser una tupla, pero se obtuvo {type(element)}")
                 # Verificar longitud
-                if len(element.values) != len(vars_):
+                if int(element.cardinality().to_double()) != len(vars_):
                     raise ValueError(
-                        f"La tupla tiene {len(element.values)} elementos, "
+                        f"La tupla tiene {int(element.cardinality().to_double())} elementos, "
                         f"pero se esperaban {len(vars_)}"
                     )
-                # Crear ámbito y asignar variables
                 self.scope = models.Scope(self.scope)
                 for index, var in enumerate(vars_):
                     self.scope.add_var(var, element.values[index], in_this=True)
@@ -413,41 +422,11 @@ class Interpreter:
                             if result.type == 'return':
                                 return result
                             elif result.type == 'stop':
-                                self.scope = self.scope.parent
+                                self._back_scope()
                                 return None
                         else:
                             return result
-                self.scope = self.scope.parent
-        else:
-            # --- Comportamiento original: iteración por índices en paralelo ---
-            for set_obj in sets:
-                if not isinstance(set_obj, models.HezaSet):
-                    raise ValueError("Todos los sets en for deben ser de tipo Conjunto")
-            if len(sets) != len(vars_):
-                raise ValueError("La cantidad de conjuntos y variables no coinciden")
-            if len(sets) < 1:
-                return
-            length = sets[0].to_abs().value
-            for set_obj in sets:
-                if set_obj.to_abs().value != length:
-                    raise ValueError("Todos los Conjuntos deben tener el mismo tamaño")
-            for i in range(0, length):
-                self.scope = models.Scope(self.scope)
-                for index, var in enumerate(vars_):
-                    self.scope.add_var(var, sets[index].get(models.Number(i)))
-                for inter_command in body:
-                    result = self.process(inter_command)
-                    if result is not None:
-                        if isinstance(result, models.Control):
-                            if result.type == 'return':
-                                return result
-                            elif result.type == 'stop':
-                                self.scope = self.scope.parent
-                                return None
-                        else:
-                            return result
-                self.scope = self.scope.parent
-
+                self._back_scope()
 
     def debug(self):
         print(self.scope)

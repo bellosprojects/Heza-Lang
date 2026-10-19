@@ -8,7 +8,7 @@ from lexer import Lexer
 from parser import Parser
 from utils.evaluator import evaluate_node_from_scope
 from models.scope import Scope
-from models.number import Number as HezaNumber
+import engine.HSCE as cas
 import math
 
 from tokens import keyword as KeywordsRegex
@@ -143,15 +143,15 @@ def modo_calculadora_de_expresiones():
     print("Heza Console - Listo para recibir expresiones. \n\nEscriba 'exit' para salir. \n~RESET KEY~ para reiniciar ANS\n", flush=True)
     scope = Scope()
     scope.mode = "CONSOLE"
-    scope.add_var("pi", HezaNumber(math.pi))
-    scope.add_var("e", HezaNumber(math.e))
+    scope.add_var("pi", cas.Number(math.pi))
+    scope.add_var("e", cas.Number(math.e))
 
     def evaluar_operacion(promt: str):
 
         promt_tokens = Lexer(code=promt).tokenize()
         promt_ast = Parser(tokens=promt_tokens).parse_expresion()
         expr_value = evaluate_node_from_scope(node=promt_ast, scope=scope)
-        return expr_value.print(scope)
+        return expr_value.__str__()
 
     ans = None
     # Mensaje inicial indicando que esta listo
@@ -164,9 +164,9 @@ def modo_calculadora_de_expresiones():
         except EOFError:
             break
 
-        line = text.strip().lower()
+        line = text.strip()
 
-        if line == 'exit':
+        if line.lower() == 'exit':
             break
         elif line == '~RESET KEY~':
             ans = None

@@ -148,5 +148,9 @@ namespace heza::sets {
         return false;
     }
 
+    std::vector<heza::core::ExprPtr> FiniteSet::get_iter() const {
+        return items_;
+    }
+
 
 };

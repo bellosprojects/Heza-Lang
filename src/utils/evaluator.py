@@ -15,7 +15,7 @@ def evaluate_node_from_scope(node: dict, scope : Scope, interpreter = None) -> c
         return cas.Number(node['value'])
     
     elif type == 'text':
-        return Text(node['value'])
+        return cas.TextExpr(node['value'])
 
     elif type == 'bool':
         return cas.BoolExpr(node['value'])
@@ -169,12 +169,26 @@ def evaluate_node_from_scope(node: dict, scope : Scope, interpreter = None) -> c
         return evaluate_node_from_scope(node['trueValue'], scope, interpreter) if condicion else evaluate_node_from_scope(node['falseValue'], scope, interpreter) 
     
     elif type == 'abs':
-        return evaluate_node_from_scope(node['value'], scope, interpreter).to_abs()
+
+        obj = evaluate_node_from_scope(node['value'], scope, interpreter)
+
+        if isinstance(obj, cas.TextExpr):
+            return obj.length()
+
+        else:
+            raise TypeError("La operacion || no soporta este tipo de dato")
 
     elif type == 'access':
+        index = evaluate_node_from_scope(node['index'], scope, interpreter)
+        if not isinstance(index, cas.Number):
+            raise TypeError("El parametro index debe ser un numero")
+
         obj = evaluate_node_from_scope(node['set'], scope, interpreter)
-        if isinstance(obj, HezaTuple):
-            index = evaluate_node_from_scope(node['index'], scope, interpreter)
+
+        if isinstance(obj, cas.TextExpr):
+            return obj.charAt(index)
+
+        elif isinstance(obj, HezaTuple):
             if not isinstance(index, Number):
                 raise ValueError("Índice debe ser un número")
             idx = int(index.value)
@@ -380,10 +394,10 @@ def evaluate_node_from_scope(node: dict, scope : Scope, interpreter = None) -> c
 
         definition = node.get('definition')
 
-        if definition == 'Set':
+        if definition == 'set':
             return cas.AbstractSet('A')
 
-        if definition == 'Scalar':
+        if definition == 'scalar':
             return cas.Variable('x')
 
     else:
@@ -462,13 +476,16 @@ def convertions(value: cas.Expr, type: dict) -> cas.Expr:
         return value.to_number()
 
     elif tipo == 'Text':
-        return value.to_text()
+        return cas.TextExpr(value.__str__())
 
     elif tipo == 'Expresion':
         return value.to_expresion()
     
     elif tipo == 'Set':
-        return value.to_set()
+        if isinstance(value, cas.SetExpr):
+            return value
+        else:
+            return cas.FiniteSet([value])
     
     elif tipo == 'Inf':
         return value.to_infinite()
@@ -484,16 +501,29 @@ def convertions(value: cas.Expr, type: dict) -> cas.Expr:
 
     raise RuntimeError("Conversion no soportada")
 
-def constantText(value: str):
+def constantText(value: str) -> cas.TextExpr:
     if value == 'ESP':
-        return Text(" ")
+        return cas.TextExpr(" ")
 
     elif value == 'LINE':
-        return Text("\n")
+        return cas.TextExpr("\n")
 
-    return Text("\t")
+    return cas.TextExpr("\t")
 
 def binary_operation(left: cas.Expr, right: cas.Expr, operation: str) -> cas.Expr:
+
+    # ============================================= TEXTOS =================================================================== #
+
+    # CONCATENACION DE STRING
+    if operation == 'add' and isinstance(left, cas.TextExpr) and isinstance(right, cas.TextExpr):
+        return left + right
+
+    # REPETICION DE STRINGS
+    elif operation == 'mul':
+        if isinstance(left, cas.TextExpr) and isinstance(right, cas.Number):
+            return left * right
+        elif isinstance(left, cas.Number) and isinstance(right, cas.TextExpr):
+            return right * left
 
     # ====================================================== Aritmeticos ================================================================== #
 

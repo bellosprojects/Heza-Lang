@@ -42,6 +42,8 @@ namespace heza::sets {
             heza::core::ExprPtr subs(const heza::core::Substitution& subst) const;
             bool is_atomic() const;
 
+            std::vector<heza::core::ExprPtr> get_iter() const;
+
     };
 
 };

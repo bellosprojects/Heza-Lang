@@ -5,3 +5,4 @@
 #include <heza/core/visitor.hpp>
 #include <heza/core/tuple.hpp>
 #include <heza/core/nulll.hpp>
+#include <heza/core/text.hpp>

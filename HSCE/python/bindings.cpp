@@ -47,6 +47,17 @@ PYBIND11_MODULE(HSCE, m) {
     py::class_<heza::core::NullExpr, heza::core::Expr, std::shared_ptr<heza::core::NullExpr>>(m, "NullExpr", "Valor nulo (Sin valor)")
         .def(py::init<>(), "Inicializa un objeto Null");
 
+    // =============================== TEXT ==================================================================================== //
+
+    py::class_<heza::core::TextExpr, heza::core::Expr, std::shared_ptr<heza::core::TextExpr>>(m, "TextExpr", "Texto (string)")
+        .def(py::init<std::u32string>(), py::arg("valor (str)"), "Inicializa un texto")
+        .def("length", &heza::core::TextExpr::length, "Devuelve el tamaño de la cadena")
+        .def("charAt", &heza::core::TextExpr::charAt, py::arg("index"), "Obtiene el caracter en la posicion index")
+        .def("__add__", &heza::core::TextExpr::concat, py::arg("text"))
+        .def("__radd__", &heza::core::TextExpr::concat, py::arg("text"))
+        .def("__mul__", &heza::core::TextExpr::repeat, py::arg("multiplo"))
+        .def("__rmul__", &heza::core::TextExpr::repeat, py::arg("multiplo"));
+
     // ======================== ARITMETICAS ========================================================================================================================================= //
             
     py::class_<heza::core::ArithmeticExpr, heza::core::Expr, std::shared_ptr<heza::core::ArithmeticExpr>>(m, "Arithmetics", "Clase base para las expresiones algebraicas y aritmeticas")
@@ -114,7 +125,8 @@ PYBIND11_MODULE(HSCE, m) {
         .def(py::init<std::string>(), py::arg("name"), "Inicializa el conjunto abstracto");
 
     py::class_<heza::sets::FiniteSet, heza::sets::SetExpr, std::shared_ptr<heza::sets::FiniteSet>>(m, "FiniteSet", "Conjunto con una cantidad finita de elementos")
-        .def(py::init<std::vector<heza::core::ExprPtr>&>(), py::arg("values"), "Inicializa un conjunto");
+        .def(py::init<std::vector<heza::core::ExprPtr>&>(), py::arg("values"), "Inicializa un conjunto")
+        .def("__iter__", &heza::sets::FiniteSet::get_iter, "Devuelve el iterador");
 
     py::class_<heza::sets::SetUnion, heza::sets::SetExpr, std::shared_ptr<heza::sets::SetUnion>>(m, "SetUnion", "Union de conjuntos")
         .def(py::init<const heza::sets::SetExprPtr&, const heza::sets::SetExprPtr&>(), py::arg("left"), py::arg("right"), "Inicializa una union de conjuntos");

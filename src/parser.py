@@ -569,10 +569,10 @@ class Parser:
         self.advance()
 
         AVAILABLES_ABSTRACTS_DEFINITIONS = [
-            'Set',
-            'Scalar',
-            'Bool',
-            'Tuple'
+            'set',
+            'scalar',
+            'bool',
+            'tuple'
         ]
 
         if name not in AVAILABLES_ABSTRACTS_DEFINITIONS:

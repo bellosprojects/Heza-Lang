@@ -1,1 +1,5 @@
-Sys.out << true ∧ false
+x = "holaaa"
+
+y = "mundoo!"
+
+Sys.out << y[6] + x[0]

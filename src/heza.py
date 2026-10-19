@@ -1,6 +1,6 @@
 from parser import Parser, ParserError
 from lexer import Lexer, LexerError
-from interpreter import Interpreter, InterpreterError
+from interpreter import Interpreter
 import sys
 from console import modo_calculadora_de_expresiones
 from engine import HSCE as cas
@@ -8,7 +8,7 @@ from engine import HSCE as cas
 
 def main():
 
-    print(f"HEZA LANG v1.1.{cas.Number(0).to_str()}")
+    print(f"HEZA LANG v1.0.{cas.Number(3).to_str()}")
 
     if len(sys.argv) > 1:
 
@@ -37,7 +37,7 @@ def main():
             except FileNotFoundError:
                 print("Archivo no encontrado")
                 sys.exit()
-            except (LexerError, ParserError, InterpreterError) as e:
+            except (LexerError, ParserError) as e:
                 print(e)
                 sys.exit()
 
