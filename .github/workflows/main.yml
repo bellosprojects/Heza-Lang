@@ -58,6 +58,17 @@ jobs:
       - name: Checkout del código
         uses: actions/checkout@v4
 
+      - name: Derivar versión de la etiqueta
+        id: version
+        shell: pwsh
+        run: |
+          if ($env:GITHUB_REF_NAME -notmatch '^v(?<version>\d+\.\d+\.\d+)$') {
+            throw "La etiqueta '$env:GITHUB_REF_NAME' debe tener el formato vX.Y.Z."
+          }
+          $version = $Matches.version
+          "version=$version" >> $env:GITHUB_OUTPUT
+          "__version__ = `"$version`"" | Set-Content -Path src/version.py -Encoding utf8
+
       - name: Configurar Python y Dependencias
         uses: actions/setup-python@v5
         with:
@@ -94,7 +105,9 @@ jobs:
       - name: Instalar y compilar Inno Setup
         run: |
           choco install innosetup
-          iscc setup\main.iss
+          iscc "/DAppVersion=$env:HEZA_VERSION" setup\main.iss
+        env:
+          HEZA_VERSION: ${{ steps.version.outputs.version }}
 
       - name: Prueba de la instalación (Instalación Silenciosa)
         run: |

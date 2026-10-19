@@ -3,12 +3,12 @@ from lexer import Lexer, LexerError
 from interpreter import Interpreter
 import sys
 from console import modo_calculadora_de_expresiones
-from engine import HSCE as cas
+from version import __version__
 #Codigo fuente
 
 def main():
 
-    print(f"HEZA LANG v1.0.{cas.Number(3).to_str()}")
+    print(f"HEZA LANG v{__version__}")
 
     if len(sys.argv) > 1:
 

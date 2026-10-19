@@ -7,6 +7,7 @@ Heza es un lenguaje de programación interpretado que entiende y procesa notaci�
 - **Acelerado en C++:** Heza almacena y procesa todos los datos usando HSCE (Heza Symbolic Calculation Engine), un CAS (Computation Algebraic System) hecho en C++ capaz de representar, simplificar y calcular expresiones algebraicas, trigonométricas, de conjuntos y lógicas de manera eficiente empleando reglas de simplificación algebraica y normalización canonica. 
 - **Punteros Compartidos:** Usa la librería de pybind11 para compartir referencias de memoria entre Python y C++ de manera eficiente.
 - **Empaquetado para Windows**: Emplea InnoSetup para generar un instalador para Windows que asocia los archivos y registra `heza` en las variables de entorno para facilitar su uso.
+- **Versionado de releases:** Al publicar una etiqueta `vX.Y.Z`, el flujo de GitHub Actions usa esa versión tanto en el intérprete como en el instalador.
 - **UTF-8:** El Lexer reconoce tantos las palabras clave en ingles (ej. `union` `and`) como los simbolos matematicos nativos (ej. `∈` `∀`).
 - **Modo Calculadora:** Usando la bandera `-calculator` Heza se comporta como una consola que recibe expresiones por la entrada estándar, resuelve el calculo y lo devuelve por la salida estándar, útil para realizar cálculos simples o complejos de manera rápida sin abrir un editor de código.
 

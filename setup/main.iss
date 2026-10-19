@@ -1,8 +1,12 @@
 ; Script de Inno Setup para Heza.exe
 
+#ifndef AppVersion
+  #define AppVersion "1.0.0"
+#endif
+
 [Setup]
 AppName=Heza
-AppVersion=1.5
+AppVersion={#AppVersion}
 AppPublisher=Bello's Projects
 AppPublisherURL=https://heza.com
 DefaultDirName={localappdata}\Programs\Bello's Pojects Heza
