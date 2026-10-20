@@ -9,11 +9,11 @@ namespace heza::logic {
 
     class NotExpr : public heza::logic::LogicExpr {
 
+        
+        public:
         heza::logic::LogicExprPtr expr_;
 
-        public:
-
-        NotExpr(const heza::logic::LogicExprPtr& expr) : expr_(expr) {}
+        NotExpr(const heza::logic::LogicExprPtr& expr) : expr_(std::move(expr)) {}
 
         std::string    to_str()   const;
         std::u32string to_latex() const;

@@ -36,7 +36,7 @@ namespace heza::core {
         // CALCULO
         DERIVATIVE, INTEGRATE, LIMIT,
         // LOGICA
-        AND, OR, NOT, THEN, FORALL, EXISTS,
+        AND, OR, NOT, THEN, FORALL, EXISTS, ABOOL,
         // RELATIONALS
         IN, NOTIN, SUBSET, EQSUBSET, EQUAL, NOTEQUAL,
         GREATER, EQGREATER, LESS, EQLESS

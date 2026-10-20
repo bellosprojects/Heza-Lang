@@ -34,7 +34,7 @@ class Sys:
     def print(self, values: list[cas.Expr], scope: Scope):
 
         for val in values:
-            print(val.to_latex(), end=self.print_separator)
+            print(val.simplify().to_latex(), end=self.print_separator)
 
         if self.out_new_line:
             print()

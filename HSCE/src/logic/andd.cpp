@@ -2,25 +2,6 @@
 
 namespace heza::logic {
 
-    AndExpr::AndExpr(std::vector<heza::logic::LogicExprPtr> exprs) {
-
-        std::vector<heza::logic::LogicExprPtr> flatten;
-
-        for(auto e : exprs){
-
-            if (auto inner_and = std::dynamic_pointer_cast<const AndExpr>(e))
-            {
-                flatten.insert(flatten.end(), inner_and->exprs_.begin(), inner_and->exprs_.end());
-            }
-            else {
-                flatten.push_back(e);
-            }
-
-        }
-
-        exprs_ = flatten;
-    }
-
     std::string    AndExpr::to_str()   const {
 
         if (exprs_.empty()) return "true";
@@ -41,7 +22,7 @@ namespace heza::logic {
         std::u32string result = U"(" + exprs_[0]->to_latex();
 
         for(size_t i = 1; i < exprs_.size(); i ++){
-            result += U" \\vee ";
+            result += U" & ";
             result += exprs_[i]->to_latex();
         }
 
@@ -57,7 +38,7 @@ namespace heza::logic {
     }
 
     heza::core::ExprPtr AndExpr::simplify() const {
-        return clone();
+        return heza::logic::Simplifier::simplify(this);
     }
 
     void AndExpr::accept(const heza::core::VisitorPtr& visitor) const {
@@ -70,7 +51,14 @@ namespace heza::logic {
 
 
     int AndExpr::compare(const Expr& other) const {
-        return -1;
+        if (get_type_id() != other.get_type_id()) return (int)get_type_id() - (int)other.get_type_id();
+        auto& b = static_cast<const AndExpr&>(other);
+        size_t n = std::min(exprs_.size(), b.exprs_.size());
+        for (size_t i = 0; i < n; i++) {
+            int c = exprs_[i]->compare(*b.exprs_[i]);
+            if (c) return c;
+        }
+        return (int)exprs_.size() - (int)b.exprs_.size();
     }
 
     heza::core::TypeId AndExpr::get_type_id() const {

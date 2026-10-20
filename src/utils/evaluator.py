@@ -394,11 +394,14 @@ def evaluate_node_from_scope(node: dict, scope : Scope, interpreter = None) -> c
 
         definition = node.get('definition')
 
-        if definition == 'set':
+        if definition == 'Set':
             return cas.AbstractSet('A')
 
-        if definition == 'scalar':
+        if definition == 'Scalar':
             return cas.Variable('x')
+
+        if definition == 'Bool':
+            return cas.ABoolExpr('p')
 
     else:
         return cas.NullExpr()

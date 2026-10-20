@@ -8,12 +8,11 @@ namespace heza::logic {
     using OrExprPtr = std::shared_ptr<const OrExpr>;
 
     class OrExpr : public heza::logic::LogicExpr {
-
+        
+        public:
         std::vector<heza::logic::LogicExprPtr> exprs_;
 
-        public:
-
-        OrExpr(std::vector<heza::logic::LogicExprPtr> exprs);
+        OrExpr(std::vector<heza::logic::LogicExprPtr> exprs) : exprs_(std::move(exprs)) {}
 
         std::string    to_str()   const;
         std::u32string to_latex() const;

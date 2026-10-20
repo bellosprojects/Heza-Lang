@@ -165,6 +165,9 @@ PYBIND11_MODULE(HSCE, m) {
     py::class_<heza::logic::BoolExpr,heza::logic::LogicExpr, std::shared_ptr<heza::logic::BoolExpr>>(m, "BoolExpr", "Valor Booleano Base `(true | false)`")
         .def(py::init<bool>(), py::arg("value"), "Inicializa un valor booleano base");
 
+    py::class_<heza::logic::ABoolExpr, heza::logic::LogicExpr, std::shared_ptr<heza::logic::ABoolExpr>>(m, "ABoolExpr", "Valor logico abstracto")
+        .def(py::init<std::string>(), py::arg("name"), "Inicializa un valor logico abstracto");
+
     
 }
 

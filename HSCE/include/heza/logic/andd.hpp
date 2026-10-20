@@ -9,11 +9,11 @@ namespace heza::logic {
 
     class AndExpr : public heza::logic::LogicExpr {
 
+        
+        public:
         std::vector<heza::logic::LogicExprPtr> exprs_;
 
-        public:
-
-        AndExpr(std::vector<heza::logic::LogicExprPtr> exprs);
+        AndExpr(std::vector<heza::logic::LogicExprPtr> exprs) : exprs_(std::move(exprs)) {}
 
         std::string    to_str()   const;
         std::u32string to_latex() const;

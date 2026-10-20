@@ -22,7 +22,7 @@ namespace heza::logic {
     }
 
     heza::core::ExprPtr heza::logic::BoolExpr::simplify() const {
-        return clone();
+        return heza::logic::Simplifier::simplify(this);
     }
 
     void heza::logic::BoolExpr::accept(const heza::core::VisitorPtr& visitor) const {
@@ -35,7 +35,10 @@ namespace heza::logic {
 
 
     int heza::logic::BoolExpr::compare(const Expr& other) const {
-        return -1;
+        if(get_type_id() != other.get_type_id()) return (int)get_type_id() - (int)other.get_type_id();
+        auto& b = static_cast<const BoolExpr&>(other);
+        if(value_ == b.value_) return 0;
+        return value_ ? 1 : -1;
     }
 
     heza::core::TypeId heza::logic::BoolExpr::get_type_id() const {

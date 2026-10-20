@@ -1,5 +1,4 @@
-x = "holaaa"
+p = @Bool
+q = @Bool
 
-y = "mundoo!"
-
-Sys.out << y[6] + x[0]
+Sys.out << p ∨ q

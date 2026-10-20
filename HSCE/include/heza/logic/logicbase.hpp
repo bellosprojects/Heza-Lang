@@ -5,3 +5,4 @@
 #include <heza/logic/orr.hpp>
 #include <heza/logic/nott.hpp>
 #include <heza/logic/bool.hpp>
+#include <heza/logic/abool.hpp>

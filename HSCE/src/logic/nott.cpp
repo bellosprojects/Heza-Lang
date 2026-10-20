@@ -9,7 +9,7 @@ namespace heza::logic {
     }
 
     std::u32string NotExpr::to_latex() const {
-        return U"not(" + expr_->to_latex() + U")";
+        return U"not" + expr_->to_latex();
     }
 
     bool NotExpr::is_equal(const heza::core::ExprPtr& other) const {
@@ -25,15 +25,7 @@ namespace heza::logic {
 
     heza::core::ExprPtr NotExpr::simplify() const {
 
-        if(auto inner_bool = std::dynamic_pointer_cast<const heza::logic::BoolExpr>(expr_)){
-            return std::make_shared<heza::logic::BoolExpr>(!inner_bool->get_value());
-        }
-
-        if(auto inner_not = std::dynamic_pointer_cast<const NotExpr>(expr_)){
-            return inner_not->expr_;
-        } else {
-            return clone();
-        }
+        return heza::logic::Simplifier::simplify(this);
     }
 
     void NotExpr::accept(const heza::core::VisitorPtr& visitor) const {
@@ -46,7 +38,8 @@ namespace heza::logic {
 
 
     int NotExpr::compare(const Expr& other) const {
-        return -1;
+        if(get_type_id() != other.get_type_id()) return (int)get_type_id() - (int)other.get_type_id();
+        return expr_->compare(*static_cast<const NotExpr&>(other).expr_);
     }
 
     heza::core::TypeId NotExpr::get_type_id() const {
